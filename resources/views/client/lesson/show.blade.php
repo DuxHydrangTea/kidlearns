@@ -109,11 +109,11 @@
                     <i class="fas fa-home"></i>
                 </a>
                 <span class="mx-2 text-gray-400">/</span>
-                <a href="#" class="text-gray-600 hover:text-primary-600">Khóa học</a>
+                <a href="#" class="text-gray-600 hover:text-primary-600">{{$lesson->lessonType?->class?->name}}</a>
                 <span class="mx-2 text-gray-400">/</span>
-                <a href="#" class="text-gray-600 hover:text-primary-600">Toán học lớp 2</a>
+                <a href="#" class="text-gray-600 hover:text-primary-600">{{ $lesson->lessonType?->name }}</a>
                 <span class="mx-2 text-gray-400">/</span>
-                <span class="text-primary-600 font-bold">Bài 3: Phép cộng và trừ trong phạm vi 100</span>
+                <span class="text-primary-600 font-bold">{{$lesson->title}}</span>
             </div>
         </div>
     </div>
@@ -728,6 +728,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
+            // với duration = 20 thì cứ 20 phút sẽ tăng 10% tiến độ rồi đưa vào timeout
+            const duration =  {{ $lesson->duration ?? 20 }};
             setInterval(() => {
                 const progress = parseInt(document.getElementById('progess-value').getAttribute(
                     'data-progress'), 10);
@@ -747,7 +749,8 @@
                         document.querySelector('.progress-bar').style.width = res.lesson_progress
                             .progress + '%';
                     })
-            }, 60000)
+
+            }, (duration/ 10) * 60 * 1000);
         })
     </script>
     <script>
