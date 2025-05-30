@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Bài Học - KidsLearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                        },
+                        secondary: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        accent: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        blue: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        purple: {
+                            50: '#faf5ff',
+                            100: '#f3e8ff',
+                            200: '#e9d5ff',
+                            300: '#d8b4fe',
+                            400: '#c084fc',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7e22ce',
+                            800: '#6b21a8',
+                            900: '#581c87',
+                        }
+                    },
+                    borderRadius: {
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Comic Neue', cursive;
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe,
+        .video-container video,
+        .video-container .plyr {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+        }
+        .plyr--full-ui input[type=range] {
+            color: #ec4899 !important; /* primary-500 */
+        }
+        .plyr__control--overlaid {
+            background: rgba(236, 72, 153, 0.8) !important; /* primary-500 với độ trong suốt */
+        }
+        .plyr--video .plyr__control:hover {
+            background: #ec4899 !important; /* primary-500 */
+        }
+        .plyr--video .plyr__control.plyr__tab-focus,
+        .plyr__menu__container .plyr__control[role=menuitemradio][aria-checked=true]::before {
+            background: #ec4899 !important; /* primary-500 */
+        }
+        .drag-drop-zone {
+            border: 2px dashed #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .drag-drop-zone:hover, .drag-drop-zone.active {
+            border-color: #ec4899;
+            background-color: #fdf2f8;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .quiz-option {
+            transition: all 0.3s ease;
+        }
+        .quiz-option:hover {
+            transform: translateY(-2px);
+        }
+        .editor-toolbar button {
+            @apply p-2 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded;
+        }
+        .editor-toolbar button.active {
+            @apply bg-primary-100 text-primary-600;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex-shrink-0 flex items-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png" alt="Logo" class="w-12 h-12 mr-2">
+                        <span class="text-primary-600 text-3xl font-bold">Kids<span class="text-secondary-500">Learn</span></span>
+                    </a>
+                    <nav class="hidden md:ml-8 md:flex md:space-x-8">
+                        <a href="#" class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg">Trang chủ</a>
+                        <a href="#" class="text-primary-600 border-primary-500 border-b-2 px-1 pt-1 font-bold text-lg">Khóa học</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg">Trò chơi</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg">Tài liệu</a>
+                    </nav>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:flex items-center space-x-4">
+                        <div class="relative">
+                            <button type="button" class="flex items-center text-gray-700 hover:text-primary-600 font-bold">
+                                <img class="h-10 w-10 rounded-full object-cover border-2 border-primary-300" src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png" alt="Teacher">
+                                <span class="ml-2 text-lg">Cô Hương</span>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                        </div>
+                        <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">
+                            <i class="fas fa-crown mr-2"></i>
+                            <span>Giáo viên</span>
+                        </a>
+                    </div>
+                    <div class="flex md:hidden">
+                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="bg-gradient-to-r from-primary-600 to-secondary-500 py-8 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-600/80 to-secondary-500/80"></div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-2/3 text-center md:text-left mb-6 md:mb-0">
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Tạo Bài Học Mới</h1>
+                    <p class="text-lg text-white">Tạo bài học hấp dẫn và tương tác cho học sinh của bạn!</p>
+                </div>
+                <div class="md:w-1/3 flex justify-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Create Lesson" class="w-32 h-32 floating">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wave Divider -->
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" fill="#fff">
+                <path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Tabs Navigation -->
+        <div class="mb-8">
+            <div class="flex flex-wrap border-b border-gray-200">
+                <button class="tab-button px-6 py-3 font-bold text-primary-600 border-b-2 border-primary-500 -mb-px" data-tab="basic-info">
+                    <i class="fas fa-info-circle mr-2"></i>Thông tin cơ bản
+                </button>
+                <button class="tab-button px-6 py-3 font-bold text-gray-500 hover:text-gray-700" data-tab="video-upload">
+                    <i class="fas fa-video mr-2"></i>Video bài giảng
+                </button>
+                <button class="tab-button px-6 py-3 font-bold text-gray-500 hover:text-gray-700" data-tab="resources">
+                    <i class="fas fa-file-alt mr-2"></i>Tài liệu bổ sung
+                </button>
+                <button class="tab-button px-6 py-3 font-bold text-gray-500 hover:text-gray-700" data-tab="quiz">
+                    <i class="fas fa-question-circle mr-2"></i>Bài kiểm tra
+                </button>
+                <button class="tab-button px-6 py-3 font-bold text-gray-500 hover:text-gray-700" data-tab="publish">
+                    <i class="fas fa-upload mr-2"></i>Xuất bản
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content active" id="basic-info">
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Thông tin cơ bản</h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="lesson-title" class="block text-lg font-bold text-gray-700 mb-2">Tiêu đề bài học <span class="text-red-500">*</span></label>
+                        <input type="text" id="lesson-title" name="lesson-title" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập tiêu đề bài học" value="Phép cộng và trừ trong phạm vi 100">
+                    </div>
+                    
+                    <div>
+                        <label for="lesson-description" class="block text-lg font-bold text-gray-700 mb-2">Mô tả bài học <span class="text-red-500">*</span></label>
+                        <textarea id="lesson-description" name="lesson-description" rows="4" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Mô tả ngắn về bài học">Học cách thực hiện phép cộng và trừ với các số trong phạm vi 100, bao gồm cả phép cộng có nhớ và phép trừ có mượn.</textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="lesson-subject" class="block text-lg font-bold text-gray-700 mb-2">Môn học <span class="text-red-500">*</span></label>
+                            <select id="lesson-subject" name="lesson-subject" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                <option value="">Chọn môn học</option>
+                                <option value="math" selected>Toán học</option>
+                                <option value="vietnamese">Tiếng Việt</option>
+                                <option value="english">Tiếng Anh</option>
+                                <option value="science">Khoa học</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="lesson-grade" class="block text-lg font-bold text-gray-700 mb-2">Lớp <span class="text-red-500">*</span></label>
+                            <select id="lesson-grade" name="lesson-grade" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                <option value="">Chọn lớp</option>
+                                <option value="1">Lớp 1</option>
+                                <option value="2" selected>Lớp 2</option>
+                                <option value="3">Lớp 3</option>
+                                <option value="4">Lớp 4</option>
+                                <option value="5">Lớp 5</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="lesson-course" class="block text-lg font-bold text-gray-700 mb-2">Khóa học <span class="text-red-500">*</span></label>
+                            <select id="lesson-course" name="lesson-course" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                <option value="">Chọn khóa học</option>
+                                <option value="math-grade2" selected>Toán học lớp 2</option>
+                                <option value="vietnamese-grade2">Tiếng Việt lớp 2</option>
+                                <option value="english-grade2">Tiếng Anh lớp 2</option>
+                                <option value="science-grade2">Khoa học lớp 2</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="lesson-order" class="block text-lg font-bold text-gray-700 mb-2">Thứ tự bài học <span class="text-red-500">*</span></label>
+                            <input type="number" id="lesson-order" name="lesson-order" min="1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập thứ tự bài học" value="3">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="lesson-duration" class="block text-lg font-bold text-gray-700 mb-2">Thời lượng (phút) <span class="text-red-500">*</span></label>
+                            <input type="number" id="lesson-duration" name="lesson-duration" min="1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập thời lượng bài học" value="20">
+                        </div>
+                        
+                        <div>
+                            <label for="lesson-difficulty" class="block text-lg font-bold text-gray-700 mb-2">Độ khó</label>
+                            <select id="lesson-difficulty" name="lesson-difficulty" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                <option value="easy">Dễ</option>
+                                <option value="medium" selected>Trung bình</option>
+                                <option value="hard">Khó</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="lesson-thumbnail" class="block text-lg font-bold text-gray-700 mb-2">Ảnh thu nhỏ</label>
+                        <div class="flex items-center">
+                            <div class="w-32 h-24 bg-gray-100 rounded-xl flex items-center justify-center mr-4 overflow-hidden">
+                                <img id="thumbnail-preview" src="https://img.freepik.com/free-vector/hand-drawn-colorful-math-background_23-2148157266.jpg" alt="Thumbnail Preview" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-bold rounded-xl cursor-pointer hover:bg-primary-700">
+                                    <i class="fas fa-upload mr-2"></i>
+                                    Tải lên ảnh
+                                    <input type="file" id="lesson-thumbnail" name="lesson-thumbnail" class="hidden" accept="image/*">
+                                </label>
+                                <p class="text-sm text-gray-500 mt-1">PNG, JPG hoặc GIF (tối đa 2MB)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-lg font-bold text-gray-700 mb-2">Thẻ (Tags)</label>
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <span class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full flex items-center">
+                                Toán học
+                                <button class="ml-2 text-primary-600 hover:text-primary-800">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </span>
+                            <span class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full flex items-center">
+                                Lớp 2
+                                <button class="ml-2 text-primary-600 hover:text-primary-800">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </span>
+                            <span class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full flex items-center">
+                                Phép cộng
+                                <button class="ml-2 text-primary-600 hover:text-primary-800">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </span>
+                            <span class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full flex items-center">
+                                Phép trừ
+                                <button class="ml-2 text-primary-600 hover:text-primary-800">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" placeholder="Thêm thẻ mới" class="px-4 py-2 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                            <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-600 hover:text-primary-800">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="lesson-objectives" class="block text-lg font-bold text-gray-700 mb-2">Mục tiêu bài học</label>
+                        <textarea id="lesson-objectives" name="lesson-objectives" rows="4" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập mục tiêu bài học">- Học sinh hiểu và thực hiện được phép cộng trong phạm vi 100
+- Học sinh hiểu và thực hiện được phép trừ trong phạm vi 100
+- Học sinh vận dụng được phép cộng, trừ để giải quyết các bài toán đơn giản</textarea>
+                    </div>
+                    <div>
+                        <label for="lesson-content" class="block text-lg font-bold text-gray-700 mb-2">Nội dung bài học</label>
+                        <div class="border-2 border-gray-200 rounded-xl overflow-hidden">
+                            <div class="bg-gray-50 p-2 border-b border-gray-200 editor-toolbar">
+                                <button type="button" class="active"><i class="fas fa-paragraph"></i></button>
+                                <button type="button"><i class="fas fa-heading"></i></button>
+                                <button type="button"><i class="fas fa-bold"></i></button>
+                                <button type="button"><i class="fas fa-italic"></i></button>
+                                <button type="button"><i class="fas fa-underline"></i></button>
+                                <button type="button"><i class="fas fa-list-ul"></i></button>
+                                <button type="button"><i class="fas fa-list-ol"></i></button>
+                                <button type="button"><i class="fas fa-link"></i></button>
+                                <button type="button"><i class="fas fa-image"></i></button>
+                                <button type="button"><i class="fas fa-table"></i></button>
+                                <button type="button"><i class="fas fa-code"></i></button>
+                            </div>
+                            <textarea id="lesson-content" name="lesson-content" rows="10" class="w-full px-4 py-3 border-0 focus:outline-none text-lg" placeholder="Nhập nội dung chi tiết của bài học">
+Trong bài học này, chúng ta sẽ học cách thực hiện phép cộng và trừ với các số trong phạm vi 100.
+
+## Phép cộng không nhớ trong phạm vi 100
+
+Để thực hiện phép cộng không nhớ, chúng ta cộng hàng đơn vị với nhau, sau đó cộng hàng chục với nhau.
+
+Ví dụ: 23 + 45 = ?
+- Cộng hàng đơn vị: 3 + 5 = 8
+- Cộng hàng chục: 2 + 4 = 6
+- Kết quả: 68
+
+## Phép cộng có nhớ trong phạm vi 100
+
+Khi tổng của hàng đơn vị lớn hơn hoặc bằng 10, chúng ta cần "nhớ 1" và cộng vào hàng chục.
+
+Ví dụ: 37 + 45 = ?
+- Cộng hàng đơn vị: 7 + 5 = 12 (ghi 2, nhớ 1)
+- Cộng hàng chục: 3 + 4 + 1 = 8
+- Kết quả: 82
+
+## Phép trừ không mượn trong phạm vi 100
+
+Để thực hiện phép trừ không mượn, chúng ta trừ hàng đơn vị với nhau, sau đó trừ hàng chục với nhau.
+
+Ví dụ: 87 - 45 = ?
+- Trừ hàng đơn vị: 7 - 5 = 2
+- Trừ hàng chục: 8 - 4 = 4
+- Kết quả: 42
+
+## Phép trừ có mượn trong phạm vi 100
+
+Khi số bị trừ ở hàng đơn vị lớn hơn số trừ, chúng ta cần "mượn 1" từ hàng chục.
+
+Ví dụ: 72 - 38 = ?
+- Trừ hàng đơn vị: 2 < 8, nên mượn 1 từ hàng chục: 12 - 8 = 4
+- Trừ hàng chục: 7 - 1 - 3 = 3
+- Kết quả: 34
+
+## Bài tập thực hành
+
+Hãy thực hiện các phép tính sau:
+1. 45 + 32 = ?
+2. 67 + 25 = ?
+3. 81 - 34 = ?
+4. 63 - 27 = ?
+        </textarea>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">Sử dụng Markdown để định dạng văn bản. Hỗ trợ tiêu đề, danh sách, bảng, hình ảnh, v.v.</p>
+                    </div>
+
+                    <div>
+                        <label for="lesson-prerequisites" class="block text-lg font-bold text-gray-700 mb-2">Kiến thức tiên quyết</label>
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="prereq-1" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                <label for="prereq-1" class="text-gray-700">Bài 1: Làm quen với số trong phạm vi 100</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="prereq-2" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                <label for="prereq-2" class="text-gray-700">Bài 2: Đọc và viết số trong phạm vi 100</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="prereq-3" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2">
+                                <label for="prereq-3" class="text-gray-700">Phép cộng và trừ trong phạm vi 20</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="prereq-4" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2">
+                                <label for="prereq-4" class="text-gray-700">Khái niệm về hàng đơn vị và hàng chục</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end mt-8">
+                    <button class="next-tab px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700" data-next="video-upload">
+                        Tiếp theo: Video bài giảng
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="video-upload">
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Video bài giảng</h2>
+                
+                <div class="space-y-6">
+                    <div class="drag-drop-zone rounded-xl p-8 text-center cursor-pointer">
+                        <div class="mb-4">
+                            <i class="fas fa-cloud-upload-alt text-5xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">Kéo và thả video vào đây</h3>
+                        <p class="text-gray-500 mb-4">hoặc</p>
+                        <label class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-bold rounded-xl cursor-pointer hover:bg-primary-700">
+                            <i class="fas fa-upload mr-2"></i>
+                            Chọn video từ máy tính
+                            <input type="file" id="video-upload" name="video-upload" class="hidden" accept="video/*">
+                        </label>
+                        <p class="text-sm text-gray-500 mt-4">Hỗ trợ: MP4, WebM, Ogg (tối đa 500MB)</p>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Hoặc thêm video từ URL</h3>
+                        <div class="flex items-center">
+                            <div class="flex-1 mr-4">
+                                <input type="text" id="video-url" name="video-url" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập URL video (YouTube, Vimeo, v.v.)">
+                            </div>
+                            <button class="px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700">
+                                <i class="fas fa-plus mr-2"></i>
+                                Thêm
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Xem trước video</h3>
+                        <div class="video-container">
+                            <video id="player" class="plyr__video-embed" poster="https://img.freepik.com/free-vector/hand-drawn-colorful-math-background_23-2148157266.jpg" playsinline controls data-poster="https://img.freepik.com/free-vector/hand-drawn-colorful-math-background_23-2148157266.jpg">
+                                <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" type="video/mp4" />
+                                <track kind="captions" label="Tiếng Việt" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" srclang="vi" default />
+                            </video>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Cài đặt video</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="video-title" class="block text-lg font-bold text-gray-700 mb-2">Tiêu đề video</label>
+                                <input type="text" id="video-title" name="video-title" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập tiêu đề video" value="Phép cộng và trừ trong phạm vi 100">
+                            </div>
+                            
+                            <div>
+                                <label for="video-language" class="block text-lg font-bold text-gray-700 mb-2">Ngôn ngữ</label>
+                                <select id="video-language" name="video-language" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                    <option value="vi" selected>Tiếng Việt</option>
+                                    <option value="en">Tiếng Anh</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500" checked>
+                                <span class="ml-2 text-gray-700">Bật phụ đề tự động</span>
+                            </label>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500" checked>
+                                <span class="ml-2 text-gray-700">Cho phép tải xuống video</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Phụ đề video</h3>
+                        
+                        <div class="mb-4">
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                <span class="text-gray-700">Tạo phụ đề tự động từ giọng nói</span>
+                            </label>
+                            <p class="text-sm text-gray-500 ml-7">Hệ thống sẽ tự động tạo phụ đề từ giọng nói trong video.</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-lg font-bold text-gray-700 mb-2">Tải lên tệp phụ đề</label>
+                            <div class="flex items-center">
+                                <div class="flex-1 mr-4">
+                                    <input type="file" id="subtitle-file" name="subtitle-file" class="hidden" accept=".vtt,.srt">
+                                    <label for="subtitle-file" class="flex items-center px-4 py-2 bg-white border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 w-full">
+                                        <i class="fas fa-closed-captioning text-gray-400 mr-2"></i>
+                                        <span class="text-gray-500">Chọn tệp phụ đề (VTT, SRT)</span>
+                                    </label>
+                                </div>
+                                <button class="px-4 py-2 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700">
+                                    Tải lên
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4 mb-4">
+                            <h4 class="font-bold text-gray-900 mb-2">Chỉnh sửa phụ đề</h4>
+                            <div class="bg-white rounded-lg border border-gray-200 p-3 mb-3">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">00:00:05 - 00:00:10</span>
+                                    <button class="text-primary-600 hover:text-primary-800 text-sm">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                                <p>Hôm nay chúng ta sẽ học về phép cộng và trừ trong phạm vi 100.</p>
+                            </div>
+                            <div class="bg-white rounded-lg border border-gray-200 p-3 mb-3">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">00:00:11 - 00:00:18</span>
+                                    <button class="text-primary-600 hover:text-primary-800 text-sm">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                                <p>Đầu tiên, chúng ta sẽ tìm hiểu về phép cộng không nhớ trong phạm vi 100.</p>
+                            </div>
+                            <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">00:00:19 - 00:00:25</span>
+                                    <button class="text-primary-600 hover:text-primary-800 text-sm">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                                <p>Ví dụ: 23 + 45 = ?</p>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button class="px-4 py-2 bg-accent-500 text-white font-bold rounded-lg hover:bg-accent-600">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Thêm phụ đề
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Chương trình học</h3>
+                        
+                        <p class="text-gray-600 mb-4">Thêm các điểm đánh dấu thời gian để học sinh có thể dễ dàng điều hướng trong video.</p>
+                        
+                        <div class="space-y-3 mb-4">
+                            <div class="flex items-center">
+                                <div class="w-24">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-sm" placeholder="00:00:00" value="00:00:05">
+                                </div>
+                                <div class="flex-1 mx-3">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" placeholder="Tiêu đề chương" value="Giới thiệu bài học">
+                                </div>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-24">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-sm" placeholder="00:00:00" value="00:01:20">
+                                </div>
+                                <div class="flex-1 mx-3">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" placeholder="Tiêu đề chương" value="Phép cộng không nhớ">
+                                </div>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-24">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-sm" placeholder="00:00:00" value="00:05:45">
+                                </div>
+                                <div class="flex-1 mx-3">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" placeholder="Tiêu đề chương" value="Phép cộng có nhớ">
+                                </div>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-24">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-sm" placeholder="00:00:00" value="00:10:30">
+                                </div>
+                                <div class="flex-1 mx-3">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" placeholder="Tiêu đề chương" value="Phép trừ không mượn">
+                                </div>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-24">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-sm" placeholder="00:00:00" value="00:15:15">
+                                </div>
+                                <div class="flex-1 mx-3">
+                                    <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" placeholder="Tiêu đề chương" value="Phép trừ có mượn">
+                                </div>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="px-4 py-2 bg-accent-500 text-white font-bold rounded-lg hover:bg-accent-600">
+                                <i class="fas fa-plus mr-2"></i>
+                                Thêm chương
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-8">
+                    <button class="prev-tab px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300" data-prev="basic-info">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Quay lại
+                    </button>
+                    <button class="next-tab px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700" data-next="resources">
+                        Tiếp theo: Tài liệu bổ sung
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="resources">
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Tài liệu bổ sung</h2>
+                
+                <div class="space-y-6">
+                    <div class="border-2 border-gray-200 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Tài liệu 1</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div>
+                                <label for="resource-title-1" class="block text-lg font-bold text-gray-700 mb-2">Tiêu đề tài liệu <span class="text-red-500">*</span></label>
+                                <input type="text" id="resource-title-1" name="resource-title-1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập tiêu đề tài liệu" value="Bài giảng Toán lớp 2: Phép cộng và trừ trong phạm vi 100">
+                            </div>
+                            
+                            <div>
+                                <label for="resource-type-1" class="block text-lg font-bold text-gray-700 mb-2">Loại tài liệu <span class="text-red-500">*</span></label>
+                                <select id="resource-type-1" name="resource-type-1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                    <option value="pdf" selected>PDF</option>
+                                    <option value="doc">Word Document</option>
+                                    <option value="ppt">PowerPoint</option>
+                                    <option value="image">Hình ảnh</option>
+                                    <option value="audio">Âm thanh</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="resource-description-1" class="block text-lg font-bold text-gray-700 mb-2">Mô tả tài liệu</label>
+                            <textarea id="resource-description-1" name="resource-description-1" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Mô tả ngắn về tài liệu">Tài liệu hướng dẫn học sinh lớp 2 thực hiện các phép tính cộng và trừ trong phạm vi 100.</textarea>
+                        </div>
+                        
+                        <div class="drag-drop-zone rounded-xl p-6 text-center cursor-pointer">
+                            <div class="mb-3">
+                                <i class="fas fa-file-pdf text-4xl text-red-500"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-gray-700 mb-2">Kéo và thả tài liệu vào đây</h4>
+                            <p class="text-gray-500 mb-3">hoặc</p>
+                            <label class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-bold rounded-xl cursor-pointer hover:bg-primary-700">
+                                <i class="fas fa-upload mr-2"></i>
+                                Chọn tài liệu
+                                <input type="file" id="resource-file-1" name="resource-file-1" class="hidden">
+                            </label>
+                            <p class="text-sm text-gray-500 mt-3">Hỗ trợ: PDF, DOC, DOCX, PPT, PPTX, v.v. (tối đa 50MB)</p>
+                        </div>
+                        
+                        <div class="flex justify-end mt-4">
+                            <button class="px-4 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600">
+                                <i class="fas fa-trash mr-2"></i>
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="border-2 border-gray-200 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Tài liệu 2</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div>
+                                <label for="resource-title-2" class="block text-lg font-bold text-gray-700 mb-2">Tiêu đề tài liệu <span class="text-red-500">*</span></label>
+                                <input type="text" id="resource-title-2" name="resource-title-2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập tiêu đề tài liệu" value="Bài tập thực hành: Phép cộng và trừ">
+                            </div>
+                            
+                            <div>
+                                <label for="resource-type-2" class="block text-lg font-bold text-gray-700 mb-2">Loại tài liệu <span class="text-red-500">*</span></label>
+                                <select id="resource-type-2" name="resource-type-2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                    <option value="pdf" selected>PDF</option>
+                                    <option value="doc">Word Document</option>
+                                    <option value="ppt">PowerPoint</option>
+                                    <option value="image">Hình ảnh</option>
+                                    <option value="audio">Âm thanh</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="resource-description-2" class="block text-lg font-bold text-gray-700 mb-2">Mô tả tài liệu</label>
+                            <textarea id="resource-description-2" name="resource-description-2" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Mô tả ngắn về tài liệu">Bài tập thực hành về phép cộng và trừ trong phạm vi 100 cho học sinh lớp 2.</textarea>
+                        </div>
+                        
+                        <div class="drag-drop-zone rounded-xl p-6 text-center cursor-pointer">
+                            <div class="mb-3">
+                                <i class="fas fa-file-alt text-4xl text-blue-500"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-gray-700 mb-2">Kéo và thả tài liệu vào đây</h4>
+                            <p class="text-gray-500 mb-3">hoặc</p>
+                            <label class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-bold rounded-xl cursor-pointer hover:bg-primary-700">
+                                <i class="fas fa-upload mr-2"></i>
+                                Chọn tài liệu
+                                <input type="file" id="resource-file-2" name="resource-file-2" class="hidden">
+                            </label>
+                            <p class="text-sm text-gray-500 mt-3">Hỗ trợ: PDF, DOC, DOCX, PPT, PPTX, v.v. (tối đa 50MB)</p>
+                        </div>
+                        
+                        <div class="flex justify-end mt-4">
+                            <button class="px-4 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600">
+                                <i class="fas fa-trash mr-2"></i>
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                    <div class="border-2 border-gray-200 rounded-xl p-6 mt-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Tài liệu tương tác</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div>
+                                <label for="interactive-title" class="block text-lg font-bold text-gray-700 mb-2">Tiêu đề tài liệu <span class="text-red-500">*</span></label>
+                                <input type="text" id="interactive-title" name="interactive-title" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập tiêu đề tài liệu" value="Bảng tương tác: Phép cộng và trừ">
+                            </div>
+                            
+                            <div>
+                                <label for="interactive-type" class="block text-lg font-bold text-gray-700 mb-2">Loại tài liệu tương tác <span class="text-red-500">*</span></label>
+                                <select id="interactive-type" name="interactive-type" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                    <option value="flashcards">Thẻ ghi nhớ</option>
+                                    <option value="matching" selected>Ghép cặp</option>
+                                    <option value="dragdrop">Kéo và thả</option>
+                                    <option value="fillblank">Điền vào chỗ trống</option>
+                                    <option value="hotspot">Điểm nóng</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="interactive-description" class="block text-lg font-bold text-gray-700 mb-2">Mô tả tài liệu</label>
+                            <textarea id="interactive-description" name="interactive-description" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Mô tả ngắn về tài liệu">Hoạt động ghép cặp giúp học sinh luyện tập phép cộng và trừ trong phạm vi 100.</textarea>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4 mb-4">
+                            <h4 class="font-bold text-gray-900 mb-3">Nội dung tương tác</h4>
+                            
+                            <div class="space-y-3">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục A</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="25 + 43 = ?">
+                                    </div>
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục B</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="68">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục A</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="72 - 31 = ?">
+                                    </div>
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục B</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="41">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục A</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="45 + 37 = ?">
+                                    </div>
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục B</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="82">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục A</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="63 - 27 = ?">
+                                    </div>
+                                    <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                        <label class="block text-sm font-bold text-gray-700 mb-1">Mục B</label>
+                                        <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="36">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <button class="px-4 py-2 bg-accent-500 text-white font-bold rounded-lg hover:bg-accent-600">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Thêm cặp
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-lg font-bold text-gray-700 mb-2">Tùy chọn</label>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="shuffle" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                    <label for="shuffle" class="text-gray-700">Xáo trộn các mục</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="feedback" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                    <label for="feedback" class="text-gray-700">Hiển thị phản hồi ngay lập tức</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="timer" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2">
+                                    <label for="timer" class="text-gray-700">Bật bộ đếm thời gian</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end mt-4">
+                            <button class="px-4 py-2 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700">
+                                <i class="fas fa-save mr-2"></i>
+                                Lưu tài liệu tương tác
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="px-6 py-3 bg-accent-500 text-white font-bold rounded-xl hover:bg-accent-600">
+                            <i class="fas fa-plus mr-2"></i>
+                            Thêm tài liệu mới
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-8">
+                    <button class="prev-tab px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300" data-prev="video-upload">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Quay lại
+                    </button>
+                    <button class="next-tab px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700" data-next="quiz">
+                        Tiếp theo: Bài kiểm tra
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="quiz">
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Bài kiểm tra</h2>
+                
+                <div class="space-y-6">
+                    <div class="border-2 border-gray-200 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Bài kiểm tra 1: Phép cộng và trừ cơ bản</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div>
+                                <label for="quiz-title-1" class="block text-lg font-bold text-gray-700 mb-2">Tiêu đề <span class="text-red-500">*</span></label>
+                                <input type="text" id="quiz-title-1" name="quiz-title-1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập tiêu đề bài kiểm tra" value="Phép cộng và trừ cơ bản">
+                            </div>
+                            
+                            <div>
+                                <label for="quiz-difficulty-1" class="block text-lg font-bold text-gray-700 mb-2">Độ khó <span class="text-red-500">*</span></label>
+                                <select id="quiz-difficulty-1" name="quiz-difficulty-1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                    <option value="easy" selected>Dễ</option>
+                                    <option value="medium">Trung bình</option>
+                                    <option value="hard">Khó</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="quiz-time-1" class="block text-lg font-bold text-gray-700 mb-2">Thời gian (phút) <span class="text-red-500">*</span></label>
+                                <input type="number" id="quiz-time-1" name="quiz-time-1" min="1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập thời gian làm bài" value="5">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="quiz-description-1" class="block text-lg font-bold text-gray-700 mb-2">Mô tả</label>
+                            <textarea id="quiz-description-1" name="quiz-description-1" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Mô tả ngắn về bài kiểm tra">Kiểm tra kiến thức về phép cộng và trừ không nhớ, không mượn trong phạm vi 100.</textarea>
+                        </div>
+                        
+                        <!-- Question 1 -->
+                        <div class="border-2 border-gray-100 rounded-xl p-4 mb-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold text-gray-900">Câu hỏi 1</h4>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="question-text-1-1" class="block text-lg font-bold text-gray-700 mb-2">Nội dung câu hỏi <span class="text-red-500">*</span></label>
+                                <input type="text" id="question-text-1-1" name="question-text-1-1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập nội dung câu hỏi" value="Tính: 25 + 43 = ?">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-lg font-bold text-gray-700 mb-2">Đáp án <span class="text-red-500">*</span></label>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-1-1" name="correct-1-1" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án A" value="58">
+                                        <label for="option-1-1-1" class="ml-2 text-green-600 font-bold cursor-pointer">
+                                            <i class="fas fa-check-circle"></i> Đúng
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-1-2" name="correct-1-1" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án B" value="68">
+                                        <label for="option-1-1-2" class="ml-2 text-gray-500 font-bold cursor-pointer">
+                                            Đúng
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-1-3" name="correct-1-1" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án C" value="78">
+                                        <label for="option-1-1-3" class="ml-2 text-gray-500 font-bold cursor-pointer">
+                                            Đúng
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-1-4" name="correct-1-1" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án D" value="88">
+                                        <label for="option-1-1-4" class="ml-2 text-gray-500 font-bold cursor-pointer">
+                                            Đúng
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="explanation-1-1" class="block text-lg font-bold text-gray-700 mb-2">Giải thích đáp án</label>
+                                <textarea id="explanation-1-1" name="explanation-1-1" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Giải thích đáp án đúng">25 + 43 = 68 (Sai)
+25 + 43 = 5 + 20 + 3 + 40 = 5 + 3 + 20 + 40 = 8 + 60 = 68 (Đúng)</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Question 2 -->
+                        <div class="border-2 border-gray-100 rounded-xl p-4 mb-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold text-gray-900">Câu hỏi 2</h4>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="question-text-1-2" class="block text-lg font-bold text-gray-700 mb-2">Nội dung câu hỏi <span class="text-red-500">*</span></label>
+                                <input type="text" id="question-text-1-2" name="question-text-1-2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập nội dung câu hỏi" value="Tính: 72 - 31 = ?">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-lg font-bold text-gray-700 mb-2">Đáp án <span class="text-red-500">*</span></label>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-2-1" name="correct-1-2" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án A" value="31">
+                                        <label for="option-1-2-1" class="ml-2 text-gray-500 font-bold cursor-pointer">
+                                            Đúng
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-2-2" name="correct-1-2" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án B" value="41">
+                                        <label for="option-1-2-2" class="ml-2 text-green-600 font-bold cursor-pointer">
+                                            <i class="fas fa-check-circle"></i> Đúng
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-2-3" name="correct-1-2" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án C" value="51">
+                                        <label for="option-1-2-3" class="ml-2 text-gray-500 font-bold cursor-pointer">
+                                            Đúng
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center quiz-option">
+                                        <input type="radio" id="option-1-2-4" name="correct-1-2" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500 mr-2">
+                                        <input type="text" class="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập đáp án D" value="61">
+                                        <label for="option-1-2-4" class="ml-2 text-gray-500 font-bold cursor-pointer">
+                                            Đúng
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="explanation-1-2" class="block text-lg font-bold text-gray-700 mb-2">Giải thích đáp án</label>
+                                <textarea id="explanation-1-2" name="explanation-1-2" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Giải thích đáp án đúng">72 - 31 = 70 + 2 - 30 - 1 = 70 - 30 + 2 - 1 = 40 + 1 = 41</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Thêm vào sau câu hỏi 2 trong tab "Bài kiểm tra" -->
+                        <!-- Question 3 - Matching type -->
+                        <div class="border-2 border-gray-100 rounded-xl p-4 mb-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold text-gray-900">Câu hỏi 3 (Ghép cặp)</h4>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="question-text-1-3" class="block text-lg font-bold text-gray-700 mb-2">Hướng dẫn <span class="text-red-500">*</span></label>
+                                <input type="text" id="question-text-1-3" name="question-text-1-3" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập hướng dẫn" value="Ghép mỗi phép tính với kết quả đúng">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-lg font-bold text-gray-700 mb-2">Các cặp ghép <span class="text-red-500">*</span></label>
+                                
+                                <div class="space-y-3">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-gray-50 rounded-lg p-3">
+                                            <label class="block text-sm font-bold text-gray-700 mb-1">Cột A</label>
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="45 + 32">
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-3">
+                                            <label class="block text-sm font-bold text-gray-700 mb-1">Cột B</label>
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="77">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-gray-50 rounded-lg p-3">
+                                            <label class="block text-sm font-bold text-gray-700 mb-1">Cột A</label>
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="67 + 25">
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-3">
+                                            <label class="block text-sm font-bold text-gray-700 mb-1">Cột B</label>
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="92">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-gray-50 rounded-lg p-3">
+                                            <label class="block text-sm font-bold text-gray-700 mb-1">Cột A</label>
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="81 - 34">
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-3">
+                                            <label class="block text-sm font-bold text-gray-700 mb-1">Cột B</label>
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="47">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-3">
+                                    <button class="px-3 py-1 bg-accent-500 text-white font-bold rounded-lg hover:bg-accent-600 text-sm">
+                                        <i class="fas fa-plus mr-1"></i>
+                                        Thêm cặp
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 4 - Fill in the blank -->
+                        <div class="border-2 border-gray-100 rounded-xl p-4 mb-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold text-gray-900">Câu hỏi 4 (Điền vào chỗ trống)</h4>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="question-text-1-4" class="block text-lg font-bold text-gray-700 mb-2">Nội dung câu hỏi <span class="text-red-500">*</span></label>
+                                <textarea id="question-text-1-4" name="question-text-1-4" rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập nội dung câu hỏi">Để thực hiện phép cộng có nhớ 37 + 45, chúng ta cộng hàng đơn vị: 7 + 5 = [A], ghi [B] và nhớ [C]. Sau đó cộng hàng chục: 3 + 4 + [C] = [D]. Vậy kết quả là [E].</textarea>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-lg font-bold text-gray-700 mb-2">Đáp án <span class="text-red-500">*</span></label>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <div class="w-16 text-center">
+                                            <span class="font-bold">[A]</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="12">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center">
+                                        <div class="w-16 text-center">
+                                            <span class="font-bold">[B]</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="2">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center">
+                                        <div class="w-16 text-center">
+                                            <span class="font-bold">[C]</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="1">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center">
+                                        <div class="w-16 text-center">
+                                            <span class="font-bold">[D]</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="8">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center">
+                                        <div class="w-16 text-center">
+                                            <span class="font-bold">[E]</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" class="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none" value="82">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 5 - True/False -->
+                        <div class="border-2 border-gray-100 rounded-xl p-4 mb-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold text-gray-900">Câu hỏi 5 (Đúng/Sai)</h4>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="question-text-1-5" class="block text-lg font-bold text-gray-700 mb-2">Nội dung câu hỏi <span class="text-red-500">*</span></label>
+                                <input type="text" id="question-text-1-5" name="question-text-1-5" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập nội dung câu hỏi" value="Khi thực hiện phép trừ 72 - 38, ta cần mượn 1 từ hàng chục.">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-lg font-bold text-gray-700 mb-2">Đáp án <span class="text-red-500">*</span></label>
+                                
+                                <div class="space-x-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="true-false-1-5" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500" value="true" checked>
+                                        <span class="ml-2 text-gray-700">Đúng</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="true-false-1-5" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500" value="false">
+                                        <span class="ml-2 text-gray-700">Sai</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="explanation-1-5" class="block text-lg font-bold text-gray-700 mb-2">Giải thích đáp án</label>
+                                <textarea id="explanation-1-5" name="explanation-1-5" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Giải thích đáp án đúng">Khi thực hiện phép trừ 72 - 38, ta thấy 2 < 8 nên cần mượn 1 từ hàng chục. Khi đó, 7 - 1 = 6 ở hàng chục và 12 - 8 = 4 ở hàng đơn vị. Vậy kết quả là 34.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Add new question button -->
+                        <div class="text-center mb-6">
+                            <div class="inline-block">
+                                <button class="px-4 py-2 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700" id="add-question-btn">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Thêm câu hỏi
+                                </button>
+                                <div class="relative mt-1 hidden" id="question-type-dropdown">
+                                    <div class="absolute left-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+                                        <button class="w-full text-left px-4 py-2 hover:bg-primary-50 text-gray-700">
+                                            <i class="fas fa-dot-circle mr-2 text-primary-500"></i>Trắc nghiệm
+                                        </button>
+                                        <button class="w-full text-left px-4 py-2 hover:bg-primary-50 text-gray-700">
+                                            <i class="fas fa-check-square mr-2 text-primary-500"></i>Nhiều lựa chọn
+                                        </button>
+                                        <button class="w-full text-left px-4 py-2 hover:bg-primary-50 text-gray-700">
+                                            <i class="fas fa-arrows-alt-h mr-2 text-primary-500"></i>Ghép cặp
+                                        </button>
+                                        <button class="w-full text-left px-4 py-2 hover:bg-primary-50 text-gray-700">
+                                            <i class="fas fa-pencil-alt mr-2 text-primary-500"></i>Điền vào chỗ trống
+                                        </button>
+                                        <button class="w-full text-left px-4 py-2 hover:bg-primary-50 text-gray-700">
+                                            <i class="fas fa-check mr-2 text-primary-500"></i>Đúng/Sai
+                                        </button>
+                                        <button class="w-full text-left px-4 py-2 hover:bg-primary-50 text-gray-700">
+                                            <i class="fas fa-align-left mr-2 text-primary-500"></i>Tự luận
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Settings -->
+                        <div class="border-2 border-gray-200 rounded-xl p-6 mb-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Cài đặt bài kiểm tra</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                <div>
+                                    <label for="quiz-passing-score" class="block text-lg font-bold text-gray-700 mb-2">Điểm đạt yêu cầu (%)</label>
+                                    <input type="number" id="quiz-passing-score" name="quiz-passing-score" min="0" max="100" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập điểm đạt yêu cầu" value="70">
+                                </div>
+                                
+                                <div>
+                                    <label for="quiz-attempts" class="block text-lg font-bold text-gray-700 mb-2">Số lần làm tối đa</label>
+                                    <input type="number" id="quiz-attempts" name="quiz-attempts" min="1" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập số lần làm tối đa" value="3">
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="quiz-shuffle" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                    <label for="quiz-shuffle" class="text-gray-700">Xáo trộn thứ tự câu hỏi</label>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="quiz-show-answers" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                    <label for="quiz-show-answers" class="text-gray-700">Hiển thị đáp án đúng sau khi hoàn thành</label>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="quiz-time-limit" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2">
+                                    <label for="quiz-time-limit" class="text-gray-700">Giới hạn thời gian làm bài</label>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="quiz-certificate" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                    <label for="quiz-certificate" class="text-gray-700">Cấp chứng chỉ khi đạt yêu cầu</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="px-6 py-3 bg-accent-500 text-white font-bold rounded-xl hover:bg-accent-600">
+                                <i class="fas fa-plus mr-2"></i>
+                                Thêm bài kiểm tra mới
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button class="prev-tab px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300" data-prev="resources">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Quay lại
+                        </button>
+                        <button class="next-tab px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700" data-next="publish">
+                            Tiếp theo: Xuất bản
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="publish">
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Xuất bản bài học</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-blue-50 rounded-xl p-6 border-2 border-blue-100">
+                            <h3 class="text-xl font-bold text-blue-800 mb-4">Xem trước bài học</h3>
+                            
+                            <div class="flex items-center p-4 bg-white rounded-xl mb-4">
+                                <img src="https://img.freepik.com/free-vector/hand-drawn-colorful-math-background_23-2148157266.jpg" alt="Lesson Thumbnail" class="w-24 h-16 rounded-lg object-cover mr-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-gray-900">Bài 3: Phép cộng và trừ trong phạm vi 100</h4>
+                                    <p class="text-gray-600">Toán học • Lớp 2 • 20 phút</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div class="bg-white rounded-xl p-4 flex items-center">
+                                    <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-video text-primary-600"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold text-gray-900">Video bài giảng</h5>
+                                        <p class="text-sm text-gray-600">1 video • 20 phút</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white rounded-xl p-4 flex items-center">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-file-alt text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold text-gray-900">Tài liệu bổ sung</h5>
+                                        <p class="text-sm text-gray-600">2 tài liệu • PDF</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white rounded-xl p-4 flex items-center">
+                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-question-circle text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold text-gray-900">Bài kiểm tra</h5>
+                                        <p class="text-sm text-gray-600">1 bài kiểm tra • 5 câu hỏi</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button class="px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700">
+                                    <i class="fas fa-eye mr-2"></i>
+                                    Xem trước đầy đủ
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Lịch trình xuất bản</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                <div>
+                                    <label for="publish-start-date" class="block text-lg font-bold text-gray-700 mb-2">Ngày bắt đầu</label>
+                                    <input type="datetime-local" id="publish-start-date" name="publish-start-date" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" value="2025-05-21T08:00">
+                                </div>
+                                
+                                <div>
+                                    <label for="publish-end-date" class="block text-lg font-bold text-gray-700 mb-2">Ngày kết thúc</label>
+                                    <input type="datetime-local" id="publish-end-date" name="publish-end-date" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                    <p class="text-sm text-gray-500 mt-1">Để trống nếu không có ngày kết thúc</p>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="publish-availability" class="block text-lg font-bold text-gray-700 mb-2">Hiển thị với học sinh</label>
+                                <select id="publish-availability" name="publish-availability" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                    <option value="always" selected>Luôn hiển thị</option>
+                                    <option value="after-completion">Sau khi hoàn thành bài học trước</option>
+                                    <option value="after-date">Sau ngày bắt đầu</option>
+                                    <option value="manual">Thủ công (giáo viên kích hoạt)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Cài đặt nâng cao</h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="completion-criteria" class="block text-lg font-bold text-gray-700 mb-2">Tiêu chí hoàn thành</label>
+                                    <select id="completion-criteria" name="completion-criteria" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                        <option value="view">Xem bài học</option>
+                                        <option value="video-complete" selected>Xem hết video</option>
+                                        <option value="quiz-pass">Vượt qua bài kiểm tra</option>
+                                        <option value="all">Tất cả các yêu cầu trên</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="lesson-points" class="block text-lg font-bold text-gray-700 mb-2">Điểm thưởng khi hoàn thành</label>
+                                    <input type="number" id="lesson-points" name="lesson-points" min="0" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" value="10">
+                                    <p class="text-sm text-gray-500 mt-1">Số điểm học sinh nhận được khi hoàn thành bài học</p>
+                                </div>
+                                
+                                <div>
+                                    <label for="lesson-badge" class="block text-lg font-bold text-gray-700 mb-2">Huy hiệu</label>
+                                    <div class="flex items-center">
+                                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mr-4 overflow-hidden">
+                                            <img id="badge-preview" src="https://cdn-icons-png.flaticon.com/512/2583/2583319.png" alt="Badge Preview" class="w-10 h-10">
+                                        </div>
+                                        <div>
+                                            <select id="lesson-badge" name="lesson-badge" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                                <option value="">Không có huy hiệu</option>
+                                                <option value="math-star" selected>Ngôi sao toán học</option>
+                                                <option value="math-genius">Thiên tài toán học</option>
+                                                <option value="math-explorer">Nhà thám hiểm toán học</option>
+                                            </select>
+                                            <p class="text-sm text-gray-500 mt-1">Huy hiệu học sinh nhận được khi hoàn thành bài học</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="next-lesson" class="block text-lg font-bold text-gray-700 mb-2">Bài học tiếp theo</label>
+                                    <select id="next-lesson" name="next-lesson" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                        <option value="">Tự động (theo thứ tự)</option>
+                                        <option value="lesson-4" selected>Bài 4: Giải toán có lời văn</option>
+                                        <option value="lesson-5">Bài 5: Ôn tập tổng hợp</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Thông báo</h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="notification-message" class="block text-lg font-bold text-gray-700 mb-2">Tin nhắn thông báo</label>
+                                    <textarea id="notification-message" name="notification-message" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập tin nhắn thông báo">Bài học mới "Phép cộng và trừ trong phạm vi 100" đã được thêm vào khóa học Toán lớp 2!</textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-lg font-bold text-gray-700 mb-2">Gửi thông báo đến</label>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="notify-all-students" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                            <label for="notify-all-students" class="text-gray-700">Tất cả học sinh đã đăng ký khóa học</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="notify-parents" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                            <label for="notify-parents" class="text-gray-700">Phụ huynh của học sinh</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="notify-teachers" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2">
+                                            <label for="notify-teachers" class="text-gray-700">Giáo viên khác trong khóa học</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-lg font-bold text-gray-700 mb-2">Phương thức thông báo</label>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="notify-app" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                            <label for="notify-app" class="text-gray-700">Thông báo trong ứng dụng</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="notify-email" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2" checked>
+                                            <label for="notify-email" class="text-gray-700">Email</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="notify-sms" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mr-2">
+                                            <label for="notify-sms" class="text-gray-700">SMS</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="publish-status" class="block text-lg font-bold text-gray-700 mb-2">Trạng thái xuất bản <span class="text-red-500">*</span></label>
+                            <select id="publish-status" name="publish-status" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                                <option value="draft">Bản nháp</option>
+                                <option value="published" selected>Xuất bản</option>
+                                <option value="scheduled">Lên lịch xuất bản</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="publish-date" class="block text-lg font-bold text-gray-700 mb-2">Ngày xuất bản</label>
+                            <input type="date" id="publish-date" name="publish-date" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" value="2025-05-21">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="access-level" class="block text-lg font-bold text-gray-700 mb-2">Quyền truy cập <span class="text-red-500">*</span></label>
+                        <select id="access-level" name="access-level" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
+                            <option value="public" selected>Công khai (tất cả học sinh)</option>
+                            <option value="private">Riêng tư (chỉ học sinh của tôi)</option>
+                            <option value="password">Bảo vệ bằng mật khẩu</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500" checked>
+                            <span class="ml-2 text-gray-700">Cho phép bình luận</span>
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500" checked>
+                            <span class="ml-2 text-gray-700">Hiển thị trong danh sách bài học</span>
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500" checked>
+                            <span class="ml-2 text-gray-700">Gửi thông báo cho học sinh</span>
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label for="publish-notes" class="block text-lg font-bold text-gray-700 mb-2">Ghi chú xuất bản</label>
+                        <textarea id="publish-notes" name="publish-notes" rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Ghi chú nội bộ về bài học này">Bài học này là phần 3 trong chuỗi bài giảng về phép tính cơ bản cho học sinh lớp 2. Cần hoàn thành bài 4 và 5 trong tuần tới.</textarea>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-8">
+                    <button class="prev-tab px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300" data-prev="quiz">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Quay lại
+                    </button>
+                    <div class="space-x-4">
+                        <button class="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300">
+                            Lưu nháp
+                        </button>
+                        <button class="px-6 py-3 bg-secondary-500 text-white font-bold rounded-xl hover:bg-secondary-600">
+                            <i class="fas fa-upload mr-2"></i>
+                            Xuất bản bài học
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Logo and Description -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png" alt="Logo" class="w-10 h-10 mr-2">
+                        <span class="text-primary-400 text-2xl font-bold">Kids<span class="text-secondary-400">Learn</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Nền tảng học tập trực tuyến hàng đầu dành cho học sinh tiểu học, giúp các em học tập vui vẻ và hiệu quả thông qua các bài học tương tác và trò chơi giáo dục.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Liên kết nhanh</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Trang chủ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Khóa học</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Trò chơi</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Thành tựu</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Dành cho phụ huynh</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Dành cho giáo viên</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Liên hệ</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">123 Đường Giáo Dục, Quận 1, TP.HCM</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone mt-1 mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">+84 123 456 789</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">info@kidslearn.vn</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2025 KidsLearn. Bản quyền thuộc về KidsLearn.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Điều khoản sử dụng</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Chính sách bảo mật</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Trợ giúp</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Khởi tạo Plyr
+            const player = new Plyr('#player', {
+                controls: [
+                    'play-large', 'restart', 'play', 'progress', 'current-time',
+                    'duration', 'mute', 'volume', 'captions', 'settings', 'pip',
+                    'airplay', 'fullscreen'
+                ]
+            });
+            
+            // Tab Navigation
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('text-primary-600', 'border-b-2', 'border-primary-500', '-mb-px'));
+                    tabButtons.forEach(btn => btn.classList.add('text-gray-500', 'hover:text-gray-700'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to current button and content
+                    this.classList.add('text-primary-600', 'border-b-2', 'border-primary-500', '-mb-px');
+                    this.classList.remove('text-gray-500', 'hover:text-gray-700');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Next and Previous Tab Navigation
+            const nextTabButtons = document.querySelectorAll('.next-tab');
+            const prevTabButtons = document.querySelectorAll('.prev-tab');
+            
+            nextTabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const nextTabId = this.getAttribute('data-next');
+                    const nextTabButton = document.querySelector(`.tab-button[data-tab="${nextTabId}"]`);
+                    nextTabButton.click();
+                });
+            });
+            
+            prevTabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const prevTabId = this.getAttribute('data-prev');
+                    const prevTabButton = document.querySelector(`.tab-button[data-tab="${prevTabId}"]`);
+                    prevTabButton.click();
+                });
+            });
+            
+            // Thumbnail Preview
+            const thumbnailInput = document.getElementById('lesson-thumbnail');
+            const thumbnailPreview = document.getElementById('thumbnail-preview');
+            
+            if (thumbnailInput && thumbnailPreview) {
+                thumbnailInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            thumbnailPreview.src = e.target.result;
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            // Drag and Drop Zones
+            const dragDropZones = document.querySelectorAll('.drag-drop-zone');
+            
+            dragDropZones.forEach(zone => {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    zone.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    zone.addEventListener(eventName, highlight, false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    zone.addEventListener(eventName, unhighlight, false);
+                });
+                
+                function highlight() {
+                    zone.classList.add('active');
+                }
+                
+                function unhighlight() {
+                    zone.classList.remove('active');
+                }
+            });
+            
+            // Add Question Button Dropdown
+            const addQuestionBtn = document.getElementById('add-question-btn');
+            const questionTypeDropdown = document.getElementById('question-type-dropdown');
+            
+            if (addQuestionBtn && questionTypeDropdown) {
+                addQuestionBtn.addEventListener('click', function() {
+                    questionTypeDropdown.classList.toggle('hidden');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!addQuestionBtn.contains(e.target) && !questionTypeDropdown.contains(e.target)) {
+                        questionTypeDropdown.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Text Editor Toolbar
+            const editorButtons = document.querySelectorAll('.editor-toolbar button');
+            
+            if (editorButtons.length > 0) {
+                editorButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Toggle active state for formatting buttons
+                        if (!this.classList.contains('active')) {
+                            // For buttons like bold, italic, etc. that can be toggled
+                            if (['fa-bold', 'fa-italic', 'fa-underline'].some(cls => this.querySelector('i').classList.contains(cls))) {
+                                this.classList.toggle('active');
+                            } 
+                            // For paragraph style buttons, deactivate others first
+                            else if (['fa-paragraph', 'fa-heading'].some(cls => this.querySelector('i').classList.contains(cls))) {
+                                document.querySelectorAll('.editor-toolbar button i.fa-paragraph, .editor-toolbar button i.fa-heading')
+                                    .forEach(icon => icon.parentElement.classList.remove('active'));
+                                this.classList.add('active');
+                            }
+                        } else {
+                            // Don't deactivate paragraph and heading buttons when already active
+                            if (!['fa-paragraph', 'fa-heading'].some(cls => this.querySelector('i').classList.contains(cls))) {
+                                this.classList.remove('active');
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

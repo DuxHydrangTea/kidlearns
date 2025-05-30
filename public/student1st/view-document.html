@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xem Tài Liệu - KidsLearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#fdf2f8",
+                100: "#fce7f3",
+                200: "#fbcfe8",
+                300: "#f9a8d4",
+                400: "#f472b6",
+                500: "#ec4899",
+                600: "#db2777",
+                700: "#be185d",
+                800: "#9d174d",
+                900: "#831843",
+              },
+              secondary: {
+                50: "#fffbeb",
+                100: "#fef3c7",
+                200: "#fde68a",
+                300: "#fcd34d",
+                400: "#fbbf24",
+                500: "#f59e0b",
+                600: "#d97706",
+                700: "#b45309",
+                800: "#92400e",
+                900: "#78350f",
+              },
+              accent: {
+                50: "#ecfdf5",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
+              },
+              blue: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                200: "#bfdbfe",
+                300: "#93c5fd",
+                400: "#60a5fa",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+                800: "#1e40af",
+                900: "#1e3a8a",
+              },
+              purple: {
+                50: "#faf5ff",
+                100: "#f3e8ff",
+                200: "#e9d5ff",
+                300: "#d8b4fe",
+                400: "#c084fc",
+                500: "#a855f7",
+                600: "#9333ea",
+                700: "#7e22ce",
+                800: "#6b21a8",
+                900: "#581c87",
+              },
+            },
+            borderRadius: {
+              xl: "1rem",
+              "2xl": "1.5rem",
+              "3xl": "2rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&display=swap");
+      body {
+        font-family: "Playwrite US Modern", cursive;
+      }
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .pdf-viewer {
+        background-color: #f5f5f5;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        height: 70vh;
+        overflow: auto;
+        position: relative;
+      }
+      .pdf-page {
+        background-color: white;
+        width: 210mm;
+        min-height: 297mm;
+        margin: 20px auto;
+        padding: 20mm;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+      .annotation {
+        position: absolute;
+        background-color: rgba(255, 255, 0, 0.3);
+        border: 1px solid #ffcc00;
+        padding: 2px;
+        cursor: pointer;
+      }
+      .note {
+        position: absolute;
+        background-color: #fff8c5;
+        border: 1px solid #ffcc00;
+        padding: 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 200px;
+        z-index: 10;
+      }
+      .bookmark {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        width: 20px;
+        height: 40px;
+        background-color: #db2777;
+        border-radius: 2px 0 0 2px;
+      }
+      .toolbar button {
+        @apply p-2 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded;
+      }
+      .toolbar button.active {
+        @apply bg-primary-100 text-primary-600;
+      }
+      @media (max-width: 768px) {
+        .pdf-page {
+          width: 100%;
+          padding: 10mm;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20">
+          <div class="flex items-center">
+            <a href="index.html" class="flex-shrink-0 flex items-center">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png"
+                alt="Logo"
+                class="w-12 h-12 mr-2"
+              />
+              <span class="text-primary-600 text-3xl font-bold"
+                >Kids<span class="text-secondary-500">Learn</span></span
+              >
+            </a>
+            <nav class="hidden md:ml-8 md:flex md:space-x-8">
+              <a
+                href="#"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg"
+                >Trang chủ</a
+              >
+              <a
+                href="#"
+                class="text-primary-600 border-primary-500 border-b-2 px-1 pt-1 font-bold text-lg"
+                >Khóa học</a
+              >
+              <a
+                href="#"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg"
+                >Trò chơi</a
+              >
+              <a
+                href="#"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg"
+                >Tài liệu</a
+              >
+            </nav>
+          </div>
+          <div class="flex items-center">
+            <div class="hidden md:flex items-center space-x-4">
+              <div class="relative">
+                <button
+                  type="button"
+                  class="flex items-center text-gray-700 hover:text-primary-600 font-bold"
+                >
+                  <img
+                    class="h-10 w-10 rounded-full object-cover border-2 border-primary-300"
+                    src="https://cdn-icons-png.flaticon.com/512/3940/3940417.png"
+                    alt="User"
+                  />
+                  <span class="ml-2 text-lg">Minh Anh</span>
+                  <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                </button>
+              </div>
+              <a
+                href="#"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
+              >
+                <i class="fas fa-crown mr-2"></i>
+                <span>5 Sao</span>
+              </a>
+            </div>
+            <div class="flex md:hidden">
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700 focus:outline-none"
+              >
+                <i class="fas fa-bars text-xl"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Document Header -->
+    <section
+      class="bg-gradient-to-r from-primary-600 to-secondary-500 py-8 relative overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-primary-600/80 to-secondary-500/80"
+      ></div>
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-2/3 text-center md:text-left mb-6 md:mb-0">
+            <div class="flex items-center mb-2 justify-center md:justify-start">
+              <span
+                class="bg-white text-primary-800 text-sm font-bold px-3 py-1 rounded-full mr-2"
+                >Toán học</span
+              >
+              <span
+                class="bg-white text-blue-800 text-sm font-bold px-3 py-1 rounded-full"
+                >Lớp 2</span
+              >
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+              Bài giảng Toán lớp 2: Phép cộng và trừ trong phạm vi 100
+            </h1>
+            <p class="text-lg text-white">
+              Tài liệu hướng dẫn học sinh lớp 2 thực hiện các phép tính cộng và
+              trừ trong phạm vi 100.
+            </p>
+          </div>
+          <div class="md:w-1/3 flex justify-center">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png"
+              alt="Document"
+              class="w-32 h-32 floating"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Wave Divider -->
+      <div class="absolute bottom-0 left-0 right-0">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 120"
+          fill="#fff"
+        >
+          <path d="M0,64L80,69.3C160, viewBox="0 0 1440 120" fill="#fff">
+          <path
+            d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"
+          ></path>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-8 bg-white">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Document Info and Actions -->
+        <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+          <div>
+            <div class="flex items-center mb-2">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+                alt="Teacher"
+                class="w-10 h-10 rounded-full mr-3 border-2 border-primary-300"
+              />
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Cô Hương</h3>
+                <div class="text-sm text-gray-500">
+                  Giáo viên Toán • 21/05/2025
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <span
+                class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full"
+                >Toán học</span
+              >
+              <span
+                class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full"
+                >Lớp 2</span
+              >
+              <span
+                class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full"
+                >Phép cộng</span
+              >
+              <span
+                class="bg-primary-100 text-primary-800 text-sm font-bold px-3 py-1 rounded-full"
+                >Phép trừ</span
+              >
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-4 md:mt-0">
+            <button
+              class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700"
+            >
+              <i class="fas fa-download mr-2"></i>
+              Tải xuống
+            </button>
+            <button
+              class="inline-flex items-center px-4 py-2 bg-secondary-500 text-white font-bold rounded-xl hover:bg-secondary-600"
+            >
+              <i class="fas fa-print mr-2"></i>
+              In
+            </button>
+            <button
+              class="inline-flex items-center px-4 py-2 bg-accent-500 text-white font-bold rounded-xl hover:bg-accent-600"
+            >
+              <i class="fas fa-share-alt mr-2"></i>
+              Chia sẻ
+            </button>
+            <button
+              class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600"
+            >
+              <i class="fas fa-bookmark mr-2"></i>
+              Lưu
+            </button>
+          </div>
+        </div>
+
+        <!-- PDF Viewer Toolbar -->
+        <div
+          class="bg-white rounded-t-xl border-2 border-gray-200 p-2 toolbar flex flex-wrap gap-1 items-center"
+        >
+          <div class="flex items-center mr-4">
+            <button title="Trang trước" class="mr-1">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="text-gray-700"
+              >Trang <span id="current-page">1</span> /
+              <span id="total-pages">5</span></span
+            >
+            <button title="Trang sau" class="ml-1">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center mr-4">
+            <button title="Thu nhỏ"><i class="fas fa-search-minus"></i></button>
+            <span class="mx-2 text-gray-700">100%</span>
+            <button title="Phóng to"><i class="fas fa-search-plus"></i></button>
+          </div>
+
+          <button title="Xem toàn màn hình">
+            <i class="fas fa-expand"></i>
+          </button>
+          <span class="border-r border-gray-300 mx-1 h-6"></span>
+
+          <button title="Đánh dấu" class="active">
+            <i class="fas fa-highlighter"></i>
+          </button>
+          <button title="Ghi chú"><i class="fas fa-sticky-note"></i></button>
+          <button title="Vẽ"><i class="fas fa-pencil-alt"></i></button>
+          <span class="border-r border-gray-300 mx-1 h-6"></span>
+
+          <button title="Thêm bookmark"><i class="fas fa-bookmark"></i></button>
+          <button title="Tìm kiếm"><i class="fas fa-search"></i></button>
+          <span class="border-r border-gray-300 mx-1 h-6"></span>
+
+          <button title="Chế độ đọc"><i class="fas fa-book-reader"></i></button>
+          <button title="Chế độ tối"><i class="fas fa-moon"></i></button>
+        </div>
+
+        <!-- PDF Viewer -->
+        <div
+          class="pdf-viewer border-2 border-t-0 border-gray-200 rounded-b-xl"
+        >
+          <!-- Page 1 -->
+          <div class="pdf-page">
+            <div class="bookmark"></div>
+            <h1 class="text-3xl font-bold text-center text-primary-700 mb-6">
+              Bài giảng Toán lớp 2: Phép cộng và trừ trong phạm vi 100
+            </h1>
+
+            <div class="text-right mb-4">
+              <p class="text-gray-600">Giáo viên: Cô Hương</p>
+              <p class="text-gray-600">Ngày: 21/05/2025</p>
+            </div>
+
+            <h2 class="text-2xl font-bold text-primary-600 mb-4">
+              1. Mục tiêu bài học
+            </h2>
+            <ul class="list-disc pl-6 mb-6 space-y-2">
+              <li>
+                Học sinh hiểu và thực hiện được phép cộng trong phạm vi 100
+              </li>
+              <li>
+                Học sinh hiểu và thực hiện được phép trừ trong phạm vi 100
+              </li>
+              <li>
+                Học sinh vận dụng được phép cộng, trừ để giải quyết các bài toán
+                đơn giản
+              </li>
+            </ul>
+
+            <h2 class="text-2xl font-bold text-primary-600 mb-4">
+              2. Phép cộng trong phạm vi 100
+            </h2>
+
+            <h3 class="text-xl font-bold text-primary-500 mb-3">
+              2.1. Cộng không nhớ
+            </h3>
+            <p class="mb-4">
+              Khi cộng hai số mà tổng các chữ số hàng đơn vị nhỏ hơn 10, ta thực
+              hiện phép cộng không nhớ.
+            </p>
+
+            <div
+              class="bg-blue-50 rounded-xl p-4 border-2 border-blue-100 mb-6"
+            >
+              <h4 class="font-bold text-blue-700 mb-2">Ví dụ:</h4>
+              <div class="flex items-center justify-center">
+                <div class="text-center">
+                  <div class="flex justify-end mb-1">
+                    <span class="inline-block w-8 text-right font-bold">2</span>
+                    <span class="inline-block w-8 text-right font-bold">3</span>
+                  </div>
+                  <div class="flex justify-end mb-1">
+                    <span class="inline-block w-8 text-right font-bold">+</span>
+                    <span class="inline-block w-8 text-right font-bold">4</span>
+                    <span class="inline-block w-8 text-right font-bold">5</span>
+                  </div>
+                  <div class="border-t border-gray-400 w-24"></div>
+                  <div class="flex justify-end">
+                    <span class="inline-block w-8 text-right font-bold">6</span>
+                    <span class="inline-block w-8 text-right font-bold">8</span>
+                  </div>
+                </div>
+                <div class="ml-12 text-left">
+                  <p>Cộng hàng đơn vị: 3 + 5 = 8</p>
+                  <p>Cộng hàng chục: 2 + 4 = 6</p>
+                  <p>Kết quả: 68</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Annotation example -->
+            <div
+              class="annotation"
+              style="top: 350px; left: 100px; width: 150px; height: 20px"
+            ></div>
+            <div class="note" style="top: 380px; left: 100px">
+              <p class="text-sm">
+                Nhớ cách cộng từ phải sang trái, bắt đầu từ hàng đơn vị.
+              </p>
+              <div class="text-right mt-1">
+                <button class="text-xs text-red-500 hover:text-red-700">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <h3 class="text-xl font-bold text-primary-500 mb-3">
+              2.2. Cộng có nhớ
+            </h3>
+            <p class="mb-4">
+              Khi cộng hai số mà tổng các chữ số hàng đơn vị lớn hơn hoặc bằng
+              10, ta thực hiện phép cộng có nhớ.
+            </p>
+          </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="flex justify-between items-center mt-4">
+          <div>
+            <button
+              class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+            >
+              <i class="fas fa-chevron-left mr-2"></i>
+              Trang trước
+            </button>
+          </div>
+          <div class="text-center">
+            <span class="text-gray-700">Trang 1 / 5</span>
+          </div>
+          <div>
+            <button
+              class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300"
+            >
+              Trang sau
+              <i class="fas fa-chevron-right ml-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Documents -->
+    <section class="py-12 bg-blue-50">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">
+          Tài liệu liên quan
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Document 1 -->
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="relative">
+              <img
+                src="https://img.freepik.com/free-vector/hand-drawn-colorful-math-background_23-2148157266.jpg"
+                alt="Math Document"
+                class="w-full h-48 object-cover"
+              />
+              <div
+                class="absolute top-4 right-4 bg-secondary-500 text-white text-sm font-bold px-3 py-1 rounded-full"
+              >
+                Phổ biến
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center mb-2">
+                <span
+                  class="bg-primary-100 text-primary-800 text-xs font-bold px-2 py-1 rounded"
+                  >Toán học</span
+                >
+                <span
+                  class="ml-2 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded"
+                  >Lớp 2</span
+                >
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-2">
+                Bài tập Toán lớp 2: Phép cộng và trừ
+              </h3>
+              <div class="flex items-center text-sm text-gray-500 mb-4">
+                <i class="fas fa-file-pdf mr-2"></i>
+                <span>10 trang</span>
+                <i class="fas fa-eye ml-4 mr-2"></i>
+                <span>1,245 lượt xem</span>
+              </div>
+              <div class="flex items-center mb-4">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+                  alt="Teacher"
+                  class="w-8 h-8 rounded-full mr-2"
+                />
+                <span class="text-gray-700">Cô Hương</span>
+              </div>
+              <a
+                href="#"
+                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-base font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700"
+              >
+                Xem tài liệu
+              </a>
+            </div>
+          </div>
+
+          <!-- Document 2 -->
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="relative">
+              <img
+                src="https://img.freepik.com/free-vector/hand-drawn-science-education-background_23-2148499325.jpg"
+                alt="Math Document"
+                class="w-full h-48 object-cover"
+              />
+              <div
+                class="absolute top-4 right-4 bg-secondary-500 text-white text-sm font-bold px-3 py-1 rounded-full"
+              >
+                Mới
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center mb-2">
+                <span
+                  class="bg-primary-100 text-primary-800 text-xs font-bold px-2 py-1 rounded"
+                  >Toán học</span
+                >
+                <span
+                  class="ml-2 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded"
+                  >Lớp 2</span
+                >
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-2">
+                Đề kiểm tra Toán lớp 2: Phép cộng và trừ
+              </h3>
+              <div class="flex items-center text-sm text-gray-500 mb-4">
+                <i class="fas fa-file-pdf mr-2"></i>
+                <span>5 trang</span>
+                <i class="fas fa-eye ml-4 mr-2"></i>
+                <span>856 lượt xem</span>
+              </div>
+              <div class="flex items-center mb-4">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+                  alt="Teacher"
+                  class="w-8 h-8 rounded-full mr-2"
+                />
+                <span class="text-gray-700">Cô Hương</span>
+              </div>
+              <a
+                href="#"
+                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-base font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700"
+              >
+                Xem tài liệu
+              </a>
+            </div>
+          </div>
+
+          <!-- Document 3 -->
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="relative">
+              <img
+                src="https://img.freepik.com/free-vector/hand-drawn-back-school-background_23-2149464866.jpg"
+                alt="Math Document"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <div class="flex items-center mb-2">
+                <span
+                  class="bg-primary-100 text-primary-800 text-xs font-bold px-2 py-1 rounded"
+                  >Toán học</span
+                >
+                <span
+                  class="ml-2 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded"
+                  >Lớp 2</span
+                >
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-2">
+                Trò chơi học Toán: Phép cộng và trừ
+              </h3>
+              <div class="flex items-center text-sm text-gray-500 mb-4">
+                <i class="fas fa-file-pdf mr-2"></i>
+                <span>8 trang</span>
+                <i class="fas fa-eye ml-4 mr-2"></i>
+                <span>723 lượt xem</span>
+              </div>
+              <div class="flex items-center mb-4">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+                  alt="Teacher"
+                  class="w-8 h-8 rounded-full mr-2"
+                />
+                <span class="text-gray-700">Cô Hương</span>
+              </div>
+              <a
+                href="#"
+                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-base font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700"
+              >
+                Xem tài liệu
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="py-8 bg-white">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Bình luận (5)</h2>
+
+        <!-- Comment Form -->
+        <div class="bg-blue-50 rounded-xl p-6 border-2 border-blue-100 mb-8">
+          <div class="flex">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3940/3940417.png"
+              alt="User"
+              class="w-12 h-12 rounded-full mr-4"
+            />
+            <div class="flex-1">
+              <textarea
+                placeholder="Viết bình luận của bạn..."
+                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg mb-3"
+                rows="3"
+              ></textarea>
+              <div class="flex justify-end">
+                <button
+                  class="px-6 py-2 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700"
+                >
+                  Gửi bình luận
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments List -->
+        <div class="space-y-6">
+          <!-- Comment 1 -->
+          <div class="bg-white rounded-xl border-2 border-gray-200 p-6">
+            <div class="flex">
+              <img
+                src="https://randomuser.me/api/portraits/women/45.jpg"
+                alt="User"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div class="flex-1">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-lg font-bold text-gray-900">Chị Hương</h4>
+                  <span class="text-sm text-gray-500">2 ngày trước</span>
+                </div>
+                <p class="text-gray-700 mb-3">
+                  Tài liệu rất hữu ích cho con tôi. Cách trình bày dễ hiểu và có
+                  nhiều ví dụ minh họa. Cảm ơn cô Hương!
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <button class="flex items-center mr-4 hover:text-primary-600">
+                    <i class="far fa-thumbs-up mr-1"></i>
+                    <span>12</span>
+                  </button>
+                  <button class="hover:text-primary-600">
+                    <i class="far fa-comment mr-1"></i>
+                    <span>Trả lời</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comment 2 -->
+          <div class="bg-white rounded-xl border-2 border-gray-200 p-6">
+            <div class="flex">
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                alt="User"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div class="flex-1">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-lg font-bold text-gray-900">Anh Minh</h4>
+                  <span class="text-sm text-gray-500">1 tuần trước</span>
+                </div>
+                <p class="text-gray-700 mb-3">
+                  Con tôi đã hiểu rõ hơn về phép cộng có nhớ nhờ tài liệu này.
+                  Phần ví dụ minh họa rất trực quan.
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <button class="flex items-center mr-4 hover:text-primary-600">
+                    <i class="far fa-thumbs-up mr-1"></i>
+                    <span>8</span>
+                  </button>
+                  <button class="hover:text-primary-600">
+                    <i class="far fa-comment mr-1"></i>
+                    <span>Trả lời</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- More Comments Button -->
+          <div class="text-center">
+            <button
+              class="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300"
+            >
+              Xem thêm bình luận
+              <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Logo and Description -->
+          <div class="col-span-1 md:col-span-2">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png"
+                alt="Logo"
+                class="w-10 h-10 mr-2"
+              />
+              <span class="text-primary-400 text-2xl font-bold"
+                >Kids<span class="text-secondary-400">Learn</span></span
+              >
+            </div>
+            <p class="text-gray-400 mb-4">
+              Nền tảng học tập trực tuyến hàng đầu dành cho học sinh tiểu học,
+              giúp các em học tập vui vẻ và hiệu quả thông qua các bài học tương
+              tác và trò chơi giáo dục.
+            </p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-youtube"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h3 class="text-lg font-bold mb-4">Liên kết nhanh</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Trang chủ</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Khóa học</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Trò chơi</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Thành tựu</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white"
+                  >Dành cho phụ huynh</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white"
+                  >Dành cho giáo viên</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h3 class="text-lg font-bold mb-4">Liên hệ</h3>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <i class="fas fa-map-marker-alt mt-1 mr-2 text-gray-400"></i>
+                <span class="text-gray-400"
+                  >123 Đường Giáo Dục, Quận 1, TP.HCM</span
+                >
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-phone mt-1 mr-2 text-gray-400"></i>
+                <span class="text-gray-400">+84 123 456 789</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-envelope mt-1 mr-2 text-gray-400"></i>
+                <span class="text-gray-400">info@kidslearn.vn</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <p class="text-gray-400 text-sm mb-4 md:mb-0">
+            © 2025 KidsLearn. Bản quyền thuộc về KidsLearn.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Điều khoản sử dụng</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Chính sách bảo mật</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Trợ giúp</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // PDF Viewer functionality
+        const zoomInButton = document.querySelector('button[title="Phóng to"]');
+        const zoomOutButton = document.querySelector('button[title="Thu nhỏ"]');
+        const pdfPage = document.querySelector(".pdf-page");
+
+        let currentZoom = 100;
+
+        if (zoomInButton && zoomOutButton && pdfPage) {
+          zoomInButton.addEventListener("click", function () {
+            if (currentZoom < 200) {
+              currentZoom += 10;
+              updateZoom();
+            }
+          });
+
+          zoomOutButton.addEventListener("click", function () {
+            if (currentZoom > 50) {
+              currentZoom -= 10;
+              updateZoom();
+            }
+          });
+
+          function updateZoom() {
+            pdfPage.style.transform = `scale(${currentZoom / 100})`;
+            pdfPage.style.transformOrigin = "top center";
+            document.querySelector(
+              ".toolbar span.mx-2"
+            ).textContent = `${currentZoom}%`;
+          }
+        }
+
+        // Page navigation
+        const prevPageButton = document.querySelector(
+          'button[title="Trang trước"]'
+        );
+        const nextPageButton = document.querySelector(
+          'button[title="Trang sau"]'
+        );
+        const currentPageSpan = document.getElementById("current-page");
+
+        if (prevPageButton && nextPageButton && currentPageSpan) {
+          let currentPage = 1;
+          const totalPages = 5;
+
+          prevPageButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+              currentPage--;
+              updatePageDisplay();
+            }
+          });
+
+          nextPageButton.addEventListener("click", function () {
+            if (currentPage < totalPages) {
+              currentPage++;
+              updatePageDisplay();
+            }
+          });
+
+          function updatePageDisplay() {
+            currentPageSpan.textContent = currentPage;
+
+            // Update bottom navigation buttons
+            const bottomPrevButton = document.querySelector(
+              'button:contains("Trang trước")'
+            );
+            const bottomNextButton = document.querySelector(
+              'button:contains("Trang sau")'
+            );
+
+            if (bottomPrevButton) {
+              bottomPrevButton.disabled = currentPage === 1;
+            }
+
+            if (bottomNextButton) {
+              bottomNextButton.disabled = currentPage === totalPages;
+            }
+
+            document.querySelector(
+              ".text-center span"
+            ).textContent = `Trang ${currentPage} / ${totalPages}`;
+          }
+        }
+
+        // Annotation functionality
+        const highlighterButton = document.querySelector(
+          'button[title="Đánh dấu"]'
+        );
+        const noteButton = document.querySelector('button[title="Ghi chú"]');
+
+        if (highlighterButton && noteButton) {
+          highlighterButton.addEventListener("click", function () {
+            this.classList.toggle("active");
+            if (this.classList.contains("active")) {
+              document.body.style.cursor =
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ec4899' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 14h4l1 1 5-5-4-4-5 5 1 1V14z'/%3E%3C/svg%3E\") 0 24, auto";
+            } else {
+              document.body.style.cursor = "auto";
+            }
+          });
+
+          noteButton.addEventListener("click", function () {
+            this.classList.toggle("active");
+            highlighterButton.classList.remove("active");
+
+            if (this.classList.contains("active")) {
+              document.body.style.cursor =
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ec4899' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3v4a1 1 0 0 0 1 1h4'/%3E%3Cpath d='M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z'/%3E%3C/svg%3E\") 0 24, auto";
+            } else {
+              document.body.style.cursor = "auto";
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
+
+Tôi đã tạo hai giao diện đầy đủ cho việc tạo và đọc tài liệu học tập dạng PDF
+trong hệ thống KidsLearn: 1. **Giao diện Tạo Tài Liệu (create-document.html)**:
+- Form tạo thông tin tài liệu (tiêu đề, mô tả, môn học, lớp) - Trình soạn thảo
+văn bản có định dạng với thanh công cụ đầy đủ - Khả năng tải lên tài liệu PDF có
+sẵn hoặc tạo mới - Xem trước tài liệu trong thời gian thực - Cài đặt quyền truy
+cập và định dạng xuất - Mẫu tài liệu có sẵn để lựa chọn 2. **Giao diện Đọc Tài
+Liệu (view-document.html)**: - Trình đọc PDF tích hợp với các công cụ điều hướng
+- Công cụ phóng to, thu nhỏ, chuyển trang - Khả năng đánh dấu, ghi chú, vẽ trên
+tài liệu - Tải xuống, in và chia sẻ tài liệu - Hiển thị tài liệu liên quan -
+Phần bình luận để trao đổi về tài liệu Cả hai giao diện đều được thiết kế phù
+hợp với phong cách của KidsLearn, với màu sắc tươi sáng và giao diện thân thiện
+với người dùng. Giao diện tạo tài liệu cung cấp đầy đủ công cụ cho giáo viên để
+tạo tài liệu học tập hấp dẫn, trong khi giao diện đọc tài liệu giúp học sinh dễ
+dàng tiếp cận và tương tác với nội dung học tập.

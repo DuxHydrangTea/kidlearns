@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tạo Bài Học Mới - KidsLearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#fdf2f8",
+                100: "#fce7f3",
+                200: "#fbcfe8",
+                300: "#f9a8d4",
+                400: "#f472b6",
+                500: "#ec4899",
+                600: "#db2777",
+                700: "#be185d",
+                800: "#9d174d",
+                900: "#831843",
+              },
+              secondary: {
+                50: "#fffbeb",
+                100: "#fef3c7",
+                200: "#fde68a",
+                300: "#fcd34d",
+                400: "#fbbf24",
+                500: "#f59e0b",
+                600: "#d97706",
+                700: "#b45309",
+                800: "#92400e",
+                900: "#78350f",
+              },
+              accent: {
+                50: "#ecfdf5",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
+              },
+            },
+            borderRadius: {
+              xl: "1rem",
+              "2xl": "1.5rem",
+              "3xl": "2rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&display=swap");
+      body {
+        font-family: "Playwrite US Modern", cursive;
+      }
+      .drag-area {
+        border: 3px dashed #fbcfe8;
+        transition: all 0.3s ease;
+      }
+      .drag-area.active {
+        border-color: #ec4899;
+        background-color: #fdf2f8;
+      }
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .bounce {
+        animation: bounce 1s infinite;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="index.html" class="flex-shrink-0 flex items-center">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png"
+                alt="Logo"
+                class="w-10 h-10 mr-2"
+              />
+              <span class="text-primary-600 text-2xl font-bold"
+                >Kids<span class="text-secondary-500">Learn</span></span
+              >
+            </a>
+            <nav class="hidden md:ml-6 md:flex md:space-x-8">
+              <a
+                href="index.html"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold"
+                >Trang chủ</a
+              >
+              <a
+                href="courses.html"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold"
+                >Bài học</a
+              >
+              <a
+                href="#"
+                class="text-primary-600 border-primary-500 border-b-2 px-1 pt-1 font-bold"
+                >Giáo viên</a
+              >
+              <a
+                href="#"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold"
+                >Trò chơi</a
+              >
+            </nav>
+          </div>
+          <div class="flex items-center">
+            <div class="hidden md:flex items-center space-x-4">
+              <div class="relative">
+                <button
+                  type="button"
+                  class="flex items-center text-gray-700 hover:text-primary-600 font-bold"
+                >
+                  <img
+                    class="h-10 w-10 rounded-full object-cover border-2 border-primary-300"
+                    src="https://cdn-icons-png.flaticon.com/512/3940/3940417.png"
+                    alt="User"
+                  />
+                  <span class="ml-2">Cô Hương</span>
+                  <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex md:hidden">
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700 focus:outline-none"
+              >
+                <i class="fas fa-bars text-xl"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+          <h1 class="text-2xl font-bold text-gray-900">Tạo Bài Học Mới</h1>
+          <div class="flex space-x-3">
+            <button
+              type="button"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-base font-bold rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+            >
+              Lưu nháp
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none"
+            >
+              Xem trước
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between">
+            <div class="w-full flex items-center">
+              <div class="relative flex flex-col items-center">
+                <div
+                  class="rounded-full h-14 w-14 flex items-center justify-center bg-primary-600 text-white text-xl"
+                >
+                  <i class="fas fa-info"></i>
+                </div>
+                <div class="text-base mt-2 font-bold">Thông tin</div>
+              </div>
+              <div class="flex-1 h-2 mx-2 bg-primary-600 rounded-full"></div>
+            </div>
+            <div class="w-full flex items-center">
+              <div class="relative flex flex-col items-center">
+                <div
+                  class="rounded-full h-14 w-14 flex items-center justify-center bg-gray-300 text-gray-600 text-xl"
+                >
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="text-base mt-2 font-bold">Nội dung</div>
+              </div>
+              <div class="flex-1 h-2 mx-2 bg-gray-300 rounded-full"></div>
+            </div>
+            <div class="w-full flex items-center">
+              <div class="relative flex flex-col items-center">
+                <div
+                  class="rounded-full h-14 w-14 flex items-center justify-center bg-gray-300 text-gray-600 text-xl"
+                >
+                  <i class="fas fa-gamepad"></i>
+                </div>
+                <div class="text-base mt-2 font-bold">Hoạt động</div>
+              </div>
+              <div class="flex-1 h-2 mx-2 bg-gray-300 rounded-full"></div>
+            </div>
+            <div class="w-full flex items-center">
+              <div class="relative flex flex-col items-center">
+                <div
+                  class="rounded-full h-14 w-14 flex items-center justify-center bg-gray-300 text-gray-600 text-xl"
+                >
+                  <i class="fas fa-check"></i>
+                </div>
+                <div class="text-base mt-2 font-bold">Hoàn thành</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Form -->
+        <div class="bg-white shadow-md rounded-2xl overflow-hidden">
+          <div class="p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-6">
+              Thông Tin Bài Học
+            </h2>
+
+            <form>
+              <div class="space-y-6">
+                <!-- Course Title -->
+                <div>
+                  <label
+                    for="course-title"
+                    class="block text-lg font-bold text-gray-700"
+                    >Tên bài học <span class="text-red-500">*</span></label
+                  >
+                  <div class="mt-1">
+                    <input
+                      type="text"
+                      id="course-title"
+                      name="course-title"
+                      class="block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
+                      placeholder="Ví dụ: Học đếm số từ 1 đến 10"
+                    />
+                  </div>
+                  <p class="mt-1 text-base text-gray-500">
+                    Đặt tên ngắn gọn và dễ hiểu (30-40 ký tự)
+                  </p>
+                </div>
+
+                <!-- Course Image -->
+                <div>
+                  <label class="block text-lg font-bold text-gray-700"
+                    >Hình ảnh bài học <span class="text-red-500">*</span></label
+                  >
+                  <div
+                    class="mt-1 flex justify-center px-6 pt-5 pb-6 border-3 border-primary-200 border-dashed rounded-xl drag-area"
+                    id="drop-area"
+                  >
+                    <div class="space-y-1 text-center">
+                      <i
+                        class="fas fa-cloud-upload-alt text-primary-400 text-4xl mb-3"
+                      ></i>
+                      <div class="flex text-base text-gray-600">
+                        <label
+                          for="file-upload"
+                          class="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none"
+                        >
+                          <span>Tải ảnh lên</span>
+                          <input
+                            id="file-upload"
+                            name="file-upload"
+                            type="file"
+                            class="sr-only"
+                            accept="image/*"
+                          />
+                        </label>
+                        <p class="pl-1">hoặc kéo thả vào đây</p>
+                      </div>
+                      <p class="text-base text-gray-500">
+                        PNG, JPG, GIF (Kích thước đề xuất: 800x600px)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Course Description -->
+                <div>
+                  <label
+                    for="course-description"
+                    class="block text-lg font-bold text-gray-700"
+                    >Mô tả bài học <span class="text-red-500">*</span></label
+                  >
+                  <div class="mt-1">
+                    <textarea
+                      id="course-description"
+                      name="course-description"
+                      rows="4"
+                      class="block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
+                      placeholder="Mô tả ngắn gọn về bài học..."
+                    ></textarea>
+                  </div>
+                  <p class="mt-1 text-base text-gray-500">
+                    Mô tả ngắn gọn những gì học sinh sẽ học được
+                  </p>
+                </div>
+
+                <!-- Course Category and Level -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      for="category"
+                      class="block text-lg font-bold text-gray-700"
+                      >Môn học <span class="text-red-500">*</span></label
+                    >
+                    <select
+                      id="category"
+                      name="category"
+                      class="mt-1 block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
+                    >
+                      <option value="">Chọn môn học</option>
+                      <option value="math">Toán học</option>
+                      <option value="vietnamese">Tiếng Việt</option>
+                      <option value="english">Tiếng Anh</option>
+                      <option value="science">Khoa học</option>
+                      <option value="social">Tự nhiên và Xã hội</option>
+                      <option value="art">Mỹ thuật</option>
+                      <option value="music">Âm nhạc</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      for="level"
+                      class="block text-lg font-bold text-gray-700"
+                      >Lớp <span class="text-red-500">*</span></label
+                    >
+                    <select
+                      id="level"
+                      name="level"
+                      class="mt-1 block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
+                    >
+                      <option value="">Chọn lớp</option>
+                      <option value="grade-1">Lớp 1</option>
+                      <option value="grade-2">Lớp 2</option>
+                      <option value="grade-3">Lớp 3</option>
+                      <option value="grade-4">Lớp 4</option>
+                      <option value="grade-5">Lớp 5</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Course Duration and Difficulty -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      for="duration"
+                      class="block text-lg font-bold text-gray-700"
+                      >Thời gian (phút)
+                      <span class="text-red-500">*</span></label
+                    >
+                    <input
+                      type="number"
+                      id="duration"
+                      name="duration"
+                      min="5"
+                      max="60"
+                      class="mt-1 block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
+                      placeholder="Ví dụ: 15"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="difficulty"
+                      class="block text-lg font-bold text-gray-700"
+                      >Độ khó <span class="text-red-500">*</span></label
+                    >
+                    <div class="mt-1 flex items-center space-x-4">
+                      <div class="flex items-center">
+                        <input
+                          type="radio"
+                          id="easy"
+                          name="difficulty"
+                          value="easy"
+                          class="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
+                        />
+                        <label
+                          for="easy"
+                          class="ml-2 block text-base text-gray-700"
+                          >Dễ</label
+                        >
+                      </div>
+                      <div class="flex items-center">
+                        <input
+                          type="radio"
+                          id="medium"
+                          name="difficulty"
+                          value="medium"
+                          class="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
+                        />
+                        <label
+                          for="medium"
+                          class="ml-2 block text-base text-gray-700"
+                          >Trung bình</label
+                        >
+                      </div>
+                      <div class="flex items-center">
+                        <input
+                          type="radio"
+                          id="hard"
+                          name="difficulty"
+                          value="hard"
+                          class="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
+                        />
+                        <label
+                          for="hard"
+                          class="ml-2 block text-base text-gray-700"
+                          >Khó</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Learning Objectives -->
+                <div>
+                  <label class="block text-lg font-bold text-gray-700"
+                    >Mục tiêu học tập <span class="text-red-500">*</span></label
+                  >
+                  <p class="mt-1 text-base text-gray-500 mb-2">
+                    Liệt kê những gì học sinh sẽ học được (3-4 mục tiêu)
+                  </p>
+
+                  <div id="learning-objectives" class="space-y-3">
+                    <div class="flex items-center">
+                      <div class="mr-2 text-primary-500 text-xl">
+                        <i class="fas fa-star"></i>
+                      </div>
+                      <input
+                        type="text"
+                        class="block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
+                        placeholder="Ví dụ: Học sinh sẽ đếm được từ 1 đến 10"
+                      />
+                      <button
+                        type="button"
+                        class="ml-2 text-gray-400 hover:text-gray-500"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="mr-2 text-primary-500 text-xl">
+                        <i class="fas fa-star"></i>
+                      </div>
+                      <input
+                        type="text"
+                        class="block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
+                        placeholder="Ví dụ: Học sinh sẽ nhận biết được các con số"
+                      />
+                      <button
+                        type="button"
+                        class="ml-2 text-gray-400 hover:text-gray-500"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="mt-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-base font-bold rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+                  >
+                    <i class="fas fa-plus mr-2 text-primary-500"></i>
+                    Thêm mục tiêu
+                  </button>
+                </div>
+
+                <!-- Rewards -->
+                <div>
+                  <label class="block text-lg font-bold text-gray-700"
+                    >Phần thưởng</label
+                  >
+                  <p class="mt-1 text-base text-gray-500 mb-2">
+                    Chọn phần thưởng khi hoàn thành bài học
+                  </p>
+
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+                    <div
+                      class="border-2 border-primary-200 rounded-xl p-3 flex flex-col items-center cursor-pointer hover:bg-primary-50"
+                    >
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                        alt="Badge 1"
+                        class="w-16 h-16 mb-2"
+                      />
+                      <span class="text-center font-bold"
+                        >Huy hiệu Siêu sao</span
+                      >
+                    </div>
+                    <div
+                      class="border-2 border-primary-200 rounded-xl p-3 flex flex-col items-center cursor-pointer hover:bg-primary-50"
+                    >
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png"
+                        alt="Badge 2"
+                        class="w-16 h-16 mb-2"
+                      />
+                      <span class="text-center font-bold"
+                        >Huy hiệu Thông minh</span
+                      >
+                    </div>
+                    <div
+                      class="border-2 border-primary-200 rounded-xl p-3 flex flex-col items-center cursor-pointer hover:bg-primary-50"
+                    >
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/2583/2583319.png"
+                        alt="Badge 3"
+                        class="w-16 h-16 mb-2"
+                      />
+                      <span class="text-center font-bold"
+                        >Huy hiệu Chăm chỉ</span
+                      >
+                    </div>
+                    <div
+                      class="border-2 border-primary-200 rounded-xl p-3 flex flex-col items-center cursor-pointer hover:bg-primary-50"
+                    >
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/3227/3227076.png"
+                        alt="Badge 4"
+                        class="w-16 h-16 mb-2"
+                      />
+                      <span class="text-center font-bold"
+                        >Huy hiệu Khám phá</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 flex justify-end">
+                <button
+                  type="button"
+                  class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-lg font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none"
+                >
+                  Tiếp theo
+                  <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Decorative elements -->
+        <div class="fixed bottom-5 right-5 w-24 h-24 floating">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+            alt="Mascot"
+            class="w-full h-full"
+          />
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Drag and drop functionality for image upload
+      const dropArea = document.getElementById("drop-area");
+      const fileInput = document.getElementById("file-upload");
+
+      // Prevent default drag behaviors
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      // Highlight drop area when item is dragged over it
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        dropArea.classList.add("active");
+      }
+
+      function unhighlight() {
+        dropArea.classList.remove("active");
+      }
+
+      // Handle dropped files
+      dropArea.addEventListener("drop", handleDrop, false);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+
+        if (files.length) {
+          fileInput.files = files;
+          updateThumbnail(files[0]);
+        }
+      }
+
+      // Handle file input change
+      fileInput.addEventListener("change", function () {
+        if (fileInput.files.length) {
+          updateThumbnail(fileInput.files[0]);
+        }
+      });
+
+      function updateThumbnail(file) {
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            dropArea.innerHTML = `
+                        <div class="relative w-full h-48">
+                            <img src="${e.target.result}" alt="Course thumbnail" class="w-full h-full object-cover rounded-xl">
+                            <button type="button" onclick="removeThumbnail()" class="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md">
+                                <i class="fas fa-times text-gray-600"></i>
+                            </button>
+                        </div>
+                    `;
+          };
+
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function removeThumbnail() {
+        fileInput.value = "";
+        dropArea.innerHTML = `
+                <div class="space-y-1 text-center">
+                    <i class="fas fa-cloud-upload-alt text-primary-400 text-4xl mb-3"></i>
+                    <div class="flex text-base text-gray-600">
+                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none">
+                            <span>Tải ảnh lên</span>
+                            <input id="file-upload" name="file-upload" type="file" class="sr-only" accept="image/*">
+                        </label>
+                        <p class="pl-1">hoặc kéo thả vào đây</p>
+                    </div>
+                    <p class="text-base text-gray-500">PNG, JPG, GIF (Kích thước đề xuất: 800x600px)</p>
+                </div>
+            `;
+
+        // Reattach event listener to the new file input
+        document
+          .getElementById("file-upload")
+          .addEventListener("change", function () {
+            if (this.files.length) {
+              updateThumbnail(this.files[0]);
+            }
+          });
+      }
+    </script>
+  </body>
+</html>

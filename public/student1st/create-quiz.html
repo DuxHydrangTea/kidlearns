@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tạo Quiz - KidsLearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#fdf2f8",
+                100: "#fce7f3",
+                200: "#fbcfe8",
+                300: "#f9a8d4",
+                400: "#f472b6",
+                500: "#ec4899",
+                600: "#db2777",
+                700: "#be185d",
+                800: "#9d174d",
+                900: "#831843",
+              },
+              secondary: {
+                50: "#fffbeb",
+                100: "#fef3c7",
+                200: "#fde68a",
+                300: "#fcd34d",
+                400: "#fbbf24",
+                500: "#f59e0b",
+                600: "#d97706",
+                700: "#b45309",
+                800: "#92400e",
+                900: "#78350f",
+              },
+              accent: {
+                50: "#ecfdf5",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
+              },
+              blue: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                200: "#bfdbfe",
+                300: "#93c5fd",
+                400: "#60a5fa",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+                800: "#1e40af",
+                900: "#1e3a8a",
+              },
+              purple: {
+                50: "#faf5ff",
+                100: "#f3e8ff",
+                200: "#e9d5ff",
+                300: "#d8b4fe",
+                400: "#c084fc",
+                500: "#a855f7",
+                600: "#9333ea",
+                700: "#7e22ce",
+                800: "#6b21a8",
+                900: "#581c87",
+              },
+            },
+            borderRadius: {
+              xl: "1rem",
+              "2xl": "1.5rem",
+              "3xl": "2rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&display=swap");
+      body {
+        font-family: "Playwrite US Modern", cursive;
+      }
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .question-card {
+        transition: all 0.3s ease;
+      }
+      .question-card:hover {
+        transform: translateY(-5px);
+      }
+      .drag-handle {
+        cursor: grab;
+      }
+      .drag-handle:active {
+        cursor: grabbing;
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20">
+          <div class="flex items-center">
+            <a href="index.html" class="flex-shrink-0 flex items-center">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png"
+                alt="Logo"
+                class="w-12 h-12 mr-2"
+              />
+              <span class="text-primary-600 text-3xl font-bold"
+                >Kids<span class="text-secondary-500">Learn</span></span
+              >
+            </a>
+            <nav class="hidden md:ml-8 md:flex md:space-x-8">
+              <a
+                href="#"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg"
+                >Trang chủ</a
+              >
+              <a
+                href="#"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg"
+                >Khóa học</a
+              >
+              <a
+                href="#"
+                class="text-primary-600 border-primary-500 border-b-2 px-1 pt-1 font-bold text-lg"
+                >Trò chơi</a
+              >
+              <a
+                href="#"
+                class="text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pt-1 font-bold text-lg"
+                >Thành tựu</a
+              >
+            </nav>
+          </div>
+          <div class="flex items-center">
+            <div class="hidden md:flex items-center space-x-4">
+              <div class="relative">
+                <button
+                  type="button"
+                  class="flex items-center text-gray-700 hover:text-primary-600 font-bold"
+                >
+                  <img
+                    class="h-10 w-10 rounded-full object-cover border-2 border-primary-300"
+                    src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+                    alt="Teacher"
+                  />
+                  <span class="ml-2 text-lg">Cô Hương</span>
+                  <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                </button>
+              </div>
+              <a
+                href="#"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
+              >
+                <i class="fas fa-crown mr-2"></i>
+                <span>Giáo viên</span>
+              </a>
+            </div>
+            <div class="flex md:hidden">
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700 focus:outline-none"
+              >
+                <i class="fas fa-bars text-xl"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Header -->
+    <section
+      class="bg-gradient-to-r from-primary-600 to-secondary-500 py-8 relative overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-primary-600/80 to-secondary-500/80"
+      ></div>
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-2/3 text-center md:text-left mb-6 md:mb-0">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+              Tạo Quiz Mới
+            </h1>
+            <p class="text-lg text-white">
+              Tạo các bài quiz thú vị để giúp học sinh học tập hiệu quả!
+            </p>
+          </div>
+          <div class="md:w-1/3 flex justify-center">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3898/3898082.png"
+              alt="Create Quiz"
+              class="w-32 h-32 floating"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Wave Divider -->
+      <div class="absolute bottom-0 left-0 right-0">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 120"
+          fill="#fff"
+        >
+          <path
+            d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"
+          ></path>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-8 bg-white">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row">
+          <!-- Left Column - Quiz Form -->
+          <div class="lg:w-2/3 lg:pr-8 mb-8 lg:mb-0">
+            <!-- Quiz Info Form -->
+            <div
+              class="bg-blue-50 rounded-2xl p-6 border-2 border-blue-100 mb-8"
+            >
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                Thông tin Quiz
+              </h2>
+
+              <div class="space-y-6">
+                <div>
+                  <label
+                    for="quiz-title"
+                    class="block text-lg font-bold text-gray-700 mb-2"
+                    >Tên Quiz</label
+                  >
+                  <input
+                    type="text"
+                    id="quiz-title"
+                    name="quiz-title"
+                    class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                    placeholder="Nhập tên quiz (VD: Thử thách tính nhẩm)"
+                    value="Thử thách tính nhẩm"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="quiz-description"
+                    class="block text-lg font-bold text-gray-700 mb-2"
+                    >Mô tả</label
+                  >
+                  <textarea
+                    id="quiz-description"
+                    name="quiz-description"
+                    rows="3"
+                    class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                    placeholder="Mô tả ngắn về quiz"
+                  >
+Quiz giúp học sinh lớp 2 luyện tập kỹ năng tính nhẩm với các phép cộng, trừ đơn giản.</textarea
+                  >
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      for="quiz-subject"
+                      class="block text-lg font-bold text-gray-700 mb-2"
+                      >Môn học</label
+                    >
+                    <select
+                      id="quiz-subject"
+                      name="quiz-subject"
+                      class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                    >
+                      <option value="">Chọn môn học</option>
+                      <option value="math" selected>Toán học</option>
+                      <option value="vietnamese">Tiếng Việt</option>
+                      <option value="english">Tiếng Anh</option>
+                      <option value="science">Khoa học</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      for="quiz-grade"
+                      class="block text-lg font-bold text-gray-700 mb-2"
+                      >Lớp</label
+                    >
+                    <select
+                      id="quiz-grade"
+                      name="quiz-grade"
+                      class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                    >
+                      <option value="">Chọn lớp</option>
+                      <option value="1">Lớp 1</option>
+                      <option value="2" selected>Lớp 2</option>
+                      <option value="3">Lớp 3</option>
+                      <option value="4">Lớp 4</option>
+                      <option value="5">Lớp 5</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      for="quiz-difficulty"
+                      class="block text-lg font-bold text-gray-700 mb-2"
+                      >Độ khó</label
+                    >
+                    <select
+                      id="quiz-difficulty"
+                      name="quiz-difficulty"
+                      class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                    >
+                      <option value="">Chọn độ khó</option>
+                      <option value="easy" selected>Dễ</option>
+                      <option value="medium">Trung bình</option>
+                      <option value="hard">Khó</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      for="quiz-time"
+                      class="block text-lg font-bold text-gray-700 mb-2"
+                      >Thời gian làm bài (giây)</label
+                    >
+                    <input
+                      type="number"
+                      id="quiz-time"
+                      name="quiz-time"
+                      class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                      placeholder="Thời gian cho mỗi câu hỏi"
+                      value="15"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    for="quiz-image"
+                    class="block text-lg font-bold text-gray-700 mb-2"
+                    >Hình ảnh đại diện</label
+                  >
+                  <div class="flex items-center">
+                    <div
+                      class="w-24 h-24 bg-gray-100 rounded-xl flex items-center justify-center mr-4 overflow-hidden"
+                    >
+                      <img
+                        id="quiz-image-preview"
+                        src="https://cdn-icons-png.flaticon.com/512/3898/3898082.png"
+                        alt="Quiz Image"
+                        class="w-16 h-16"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-bold rounded-xl cursor-pointer hover:bg-primary-700"
+                      >
+                        <i class="fas fa-upload mr-2"></i>
+                        Tải lên hình ảnh
+                        <input
+                          type="file"
+                          id="quiz-image"
+                          name="quiz-image"
+                          class="hidden"
+                          accept="image/*"
+                        />
+                      </label>
+                      <p class="text-sm text-gray-500 mt-1">
+                        PNG, JPG hoặc GIF (tối đa 2MB)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Questions Section -->
+            <div class="mb-8">
+              <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Câu hỏi</h2>
+                <button
+                  id="add-question-btn"
+                  class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700"
+                >
+                  <i class="fas fa-plus mr-2"></i>
+                  Thêm câu hỏi
+                </button>
+              </div>
+
+              <div id="questions-container" class="space-y-6">
+                <!-- Question 1 -->
+                <div
+                  class="question-card bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm"
+                >
+                  <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Câu hỏi 1</h3>
+                    <div class="flex space-x-2">
+                      <button
+                        class="drag-handle p-2 text-gray-500 hover:text-gray-700"
+                      >
+                        <i class="fas fa-grip-vertical"></i>
+                      </button>
+                      <button class="p-2 text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Nội dung câu hỏi</label
+                      >
+                      <input
+                        type="text"
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Nhập câu hỏi"
+                        value="Tính nhẩm: 7 + 8 = ?"
+                      />
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Hình ảnh minh họa (tùy chọn)</label
+                      >
+                      <div class="flex items-center">
+                        <div
+                          class="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center mr-4 overflow-hidden"
+                        >
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/3898/3898671.png"
+                            alt="Question Image"
+                            class="w-12 h-12"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-bold rounded-xl cursor-pointer hover:bg-blue-700"
+                          >
+                            <i class="fas fa-upload mr-2"></i>
+                            Tải lên hình ảnh
+                            <input
+                              type="file"
+                              class="hidden"
+                              accept="image/*"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Các lựa chọn</label
+                      >
+                      <div class="space-y-3">
+                        <!-- Option A -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            A
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn A"
+                            value="13"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-1-a"
+                              name="correct-1"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                            />
+                            <label for="correct-1-a" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+
+                        <!-- Option B -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            B
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn B"
+                            value="14"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-1-b"
+                              name="correct-1"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                            />
+                            <label for="correct-1-b" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+
+                        <!-- Option C -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            C
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn C"
+                            value="15"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-1-c"
+                              name="correct-1"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                              checked
+                            />
+                            <label for="correct-1-c" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+
+                        <!-- Option D -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            D
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn D"
+                            value="16"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-1-d"
+                              name="correct-1"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                            />
+                            <label for="correct-1-d" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Giải thích (tùy chọn)</label
+                      >
+                      <textarea
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Giải thích đáp án đúng"
+                        rows="2"
+                      >
+7 + 8 = 15. Để tính nhanh, ta có thể tính 7 + 7 = 14, sau đó cộng thêm 1 là 15.</textarea
+                      >
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Điểm</label
+                      >
+                      <input
+                        type="number"
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Số điểm cho câu hỏi này"
+                        value="100"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div
+                  class="question-card bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm"
+                >
+                  <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Câu hỏi 2</h3>
+                    <div class="flex space-x-2">
+                      <button
+                        class="drag-handle p-2 text-gray-500 hover:text-gray-700"
+                      >
+                        <i class="fas fa-grip-vertical"></i>
+                      </button>
+                      <button class="p-2 text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Nội dung câu hỏi</label
+                      >
+                      <input
+                        type="text"
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Nhập câu hỏi"
+                        value="Tính nhẩm: 12 - 5 = ?"
+                      />
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Hình ảnh minh họa (tùy chọn)</label
+                      >
+                      <div class="flex items-center">
+                        <div
+                          class="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center mr-4 overflow-hidden"
+                        >
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/3898/3898776.png"
+                            alt="Question Image"
+                            class="w-12 h-12"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-bold rounded-xl cursor-pointer hover:bg-blue-700"
+                          >
+                            <i class="fas fa-upload mr-2"></i>
+                            Tải lên hình ảnh
+                            <input
+                              type="file"
+                              class="hidden"
+                              accept="image/*"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Các lựa chọn</label
+                      >
+                      <div class="space-y-3">
+                        <!-- Option A -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            A
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn A"
+                            value="5"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-2-a"
+                              name="correct-2"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                            />
+                            <label for="correct-2-a" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+
+                        <!-- Option B -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            B
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn B"
+                            value="6"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-2-b"
+                              name="correct-2"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                            />
+                            <label for="correct-2-b" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+
+                        <!-- Option C -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            C
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn C"
+                            value="7"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-2-c"
+                              name="correct-2"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                              checked
+                            />
+                            <label for="correct-2-c" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+
+                        <!-- Option D -->
+                        <div class="flex items-center">
+                          <div
+                            class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold"
+                          >
+                            D
+                          </div>
+                          <input
+                            type="text"
+                            class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                            placeholder="Lựa chọn D"
+                            value="8"
+                          />
+                          <div class="ml-4">
+                            <input
+                              type="radio"
+                              id="correct-2-d"
+                              name="correct-2"
+                              class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500"
+                            />
+                            <label for="correct-2-d" class="ml-2 text-gray-700"
+                              >Đúng</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Giải thích (tùy chọn)</label
+                      >
+                      <textarea
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Giải thích đáp án đúng"
+                        rows="2"
+                      >
+12 - 5 = 7. Để tính nhanh, ta có thể tính 10 - 5 = 5, sau đó cộng thêm 2 là 7.</textarea
+                      >
+                    </div>
+
+                    <div>
+                      <label class="block text-lg font-bold text-gray-700 mb-2"
+                        >Điểm</label
+                      >
+                      <input
+                        type="number"
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Số điểm cho câu hỏi này"
+                        value="100"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Add Question Button (Inline) -->
+                <button
+                  id="add-question-inline-btn"
+                  class="w-full py-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:text-primary-600 hover:border-primary-300 flex items-center justify-center"
+                >
+                  <i class="fas fa-plus-circle mr-2 text-xl"></i>
+                  <span class="font-bold">Thêm câu hỏi</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Save Buttons -->
+            <div
+              class="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4"
+            >
+              <button
+                class="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300"
+              >
+                Lưu nháp
+              </button>
+              <button
+                class="px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700"
+              >
+                Xem trước
+              </button>
+              <button
+                class="px-6 py-3 bg-secondary-500 text-white font-bold rounded-xl hover:bg-secondary-600"
+              >
+                Xuất bản
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column - Preview and Settings -->
+          <div class="lg:w-1/3">
+            <div class="sticky top-24 space-y-6">
+              <!-- Quiz Preview -->
+              <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                <div class="bg-primary-50 p-4 border-b border-gray-200">
+                  <h3 class="text-xl font-bold text-gray-900">Xem trước</h3>
+                </div>
+                <div class="p-4">
+                  <div
+                    class="bg-blue-50 rounded-xl p-4 border-2 border-blue-100 mb-4"
+                  >
+                    <div class="flex items-center mb-2">
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/3898/3898082.png"
+                        alt="Quiz"
+                        class="w-10 h-10 mr-3"
+                      />
+                      <div>
+                        <h4 class="text-lg font-bold text-gray-900">
+                          Thử thách tính nhẩm
+                        </h4>
+                        <div class="text-sm text-gray-500">
+                          Toán học • Lớp 2
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="flex justify-between text-sm text-gray-600 mt-2"
+                    >
+                      <div>
+                        <i class="fas fa-question-circle mr-1"></i>
+                        <span>2 câu hỏi</span>
+                      </div>
+                      <div>
+                        <i class="fas fa-clock mr-1"></i>
+                        <span>15 giây/câu</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="bg-white rounded-xl border-2 border-gray-200 p-4 mb-4"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="text-sm font-bold text-gray-700">
+                        Câu hỏi 1/2
+                      </div>
+                      <div class="text-sm font-bold text-gray-700">
+                        <i class="fas fa-clock text-secondary-500 mr-1"></i>
+                        <span>00:15</span>
+                      </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                      <div
+                        class="bg-primary-500 h-2 rounded-full"
+                        style="width: 50%"
+                      ></div>
+                    </div>
+
+                    <div class="mb-4">
+                      <h4 class="text-lg font-bold text-gray-900 mb-2">
+                        Tính nhẩm: 7 + 8 = ?
+                      </h4>
+                      <div class="flex justify-center mb-2">
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/3898/3898671.png"
+                          alt="Question"
+                          class="w-16 h-16"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                      <div
+                        class="bg-gray-50 p-2 rounded-lg text-center font-bold"
+                      >
+                        A. 13
+                      </div>
+                      <div
+                        class="bg-gray-50 p-2 rounded-lg text-center font-bold"
+                      >
+                        B. 14
+                      </div>
+                      <div
+                        class="bg-green-50 p-2 rounded-lg text-center font-bold border-2 border-green-300"
+                      >
+                        C. 15
+                      </div>
+                      <div
+                        class="bg-gray-50 p-2 rounded-lg text-center font-bold"
+                      >
+                        D. 16
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-center">
+                    <button
+                      class="px-4 py-2 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 text-sm"
+                    >
+                      Xem trước đầy đủ
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quiz Settings -->
+              <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                <div class="bg-primary-50 p-4 border-b border-gray-200">
+                  <h3 class="text-xl font-bold text-gray-900">Cài đặt Quiz</h3>
+                </div>
+                <div class="p-4">
+                  <div class="space-y-4">
+                    <div>
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                          checked
+                        />
+                        <span class="ml-2 text-gray-700"
+                          >Hiển thị đáp án đúng sau mỗi câu hỏi</span
+                        >
+                      </label>
+                    </div>
+
+                    <div>
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                          checked
+                        />
+                        <span class="ml-2 text-gray-700"
+                          >Hiển thị giải thích cho đáp án đúng</span
+                        >
+                      </label>
+                    </div>
+
+                    <div>
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                          checked
+                        />
+                        <span class="ml-2 text-gray-700"
+                          >Hiệu ứng khi trả lời đúng</span
+                        >
+                      </label>
+                    </div>
+
+                    <div>
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                          checked
+                        />
+                        <span class="ml-2 text-gray-700"
+                          >Hiển thị bảng xếp hạng</span
+                        >
+                      </label>
+                    </div>
+
+                    <div>
+                      <label class="flex items-center">
+                        <input
+                          type="checkbox"
+                          class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                          checked
+                        />
+                        <span class="ml-2 text-gray-700"
+                          >Trao huy hiệu khi hoàn thành</span
+                        >
+                      </label>
+                    </div>
+
+                    <div>
+                      <label class="block text-gray-700 mb-2"
+                        >Điểm đạt yêu cầu (%)</label
+                      >
+                      <input
+                        type="number"
+                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none"
+                        value="70"
+                      />
+                    </div>
+
+                    <div>
+                      <label class="block text-gray-700 mb-2"
+                        >Huy hiệu khi hoàn thành</label
+                      >
+                      <div class="flex space-x-4">
+                        <div class="flex flex-col items-center">
+                          <div
+                            class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center mb-1"
+                          >
+                            <img
+                              src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png"
+                              alt="Badge"
+                              class="w-8 h-8"
+                            />
+                          </div>
+                          <span class="text-xs text-gray-700"
+                            >Nhà toán học</span
+                          >
+                        </div>
+                        <div class="flex flex-col items-center">
+                          <div
+                            class="w-12 h-12 rounded-full bg-secondary-100 flex items-center justify-center mb-1"
+                          >
+                            <img
+                              src="https://cdn-icons-png.flaticon.com/512/2583/2583319.png"
+                              alt="Badge"
+                              class="w-8 h-8"
+                            />
+                          </div>
+                          <span class="text-xs text-gray-700">Tính nhanh</span>
+                        </div>
+                        <button
+                          class="w-12 h-12 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-primary-600 hover:border-primary-300"
+                        >
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quiz Statistics (For existing quizzes) -->
+              <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                <div class="bg-primary-50 p-4 border-b border-gray-200">
+                  <h3 class="text-xl font-bold text-gray-900">Thống kê</h3>
+                </div>
+                <div class="p-4 text-center text-gray-500">
+                  <p>
+                    Thống kê sẽ được hiển thị sau khi quiz được xuất bản và có
+                    học sinh tham gia.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Logo and Description -->
+          <div class="col-span-1 md:col-span-2">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png"
+                alt="Logo"
+                class="w-10 h-10 mr-2"
+              />
+              <span class="text-primary-400 text-2xl font-bold"
+                >Kids<span class="text-secondary-400">Learn</span></span
+              >
+            </div>
+            <p class="text-gray-400 mb-4">
+              Nền tảng học tập trực tuyến hàng đầu dành cho học sinh tiểu học,
+              giúp các em học tập vui vẻ và hiệu quả thông qua các bài học tương
+              tác và trò chơi giáo dục.
+            </p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-youtube"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h3 class="text-lg font-bold mb-4">Liên kết nhanh</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Trang chủ</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Khóa học</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Trò chơi</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Thành tựu</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white"
+                  >Dành cho phụ huynh</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white"
+                  >Dành cho giáo viên</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h3 class="text-lg font-bold mb-4">Liên hệ</h3>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <i class="fas fa-map-marker-alt mt-1 mr-2 text-gray-400"></i>
+                <span class="text-gray-400"
+                  >123 Đường Giáo Dục, Quận 1, TP.HCM</span
+                >
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-phone mt-1 mr-2 text-gray-400"></i>
+                <span class="text-gray-400">+84 123 456 789</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-envelope mt-1 mr-2 text-gray-400"></i>
+                <span class="text-gray-400">info@kidslearn.vn</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <p class="text-gray-400 text-sm mb-4 md:mb-0">
+            © 2025 KidsLearn. Bản quyền thuộc về KidsLearn.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Điều khoản sử dụng</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Chính sách bảo mật</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Trợ giúp</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // File upload preview for quiz image
+        const quizImageInput = document.getElementById("quiz-image");
+        const quizImagePreview = document.getElementById("quiz-image-preview");
+
+        if (quizImageInput && quizImagePreview) {
+          quizImageInput.addEventListener("change", function (e) {
+            if (e.target.files.length > 0) {
+              const file = e.target.files[0];
+              const reader = new FileReader();
+
+              reader.onload = function (e) {
+                quizImagePreview.src = e.target.result;
+              };
+
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+
+        // Add question button functionality
+        const addQuestionBtn = document.getElementById("add-question-btn");
+        const addQuestionInlineBtn = document.getElementById(
+          "add-question-inline-btn"
+        );
+        const questionsContainer = document.getElementById(
+          "questions-container"
+        );
+
+        function addNewQuestion() {
+          const questionCount =
+            document.querySelectorAll(".question-card").length + 1;
+
+          const newQuestionHTML = `
+                <div class="question-card bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-900">Câu hỏi ${questionCount}</h3>
+                        <div class="flex space-x-2">
+                            <button class="drag-handle p-2 text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-grip-vertical"></i>
+                            </button>
+                            <button class="p-2 text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-lg font-bold text-gray-700 mb-2">Nội dung câu hỏi</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Nhập câu hỏi">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-lg font-bold text-gray-700 mb-2">Hình ảnh minh họa (tùy chọn)</label>
+                            <div class="flex items-center">
+                                <div class="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center mr-4 overflow-hidden">
+                                    <i class="fas fa-image text-gray-300 text-3xl"></i>
+                                </div>
+                                <div>
+                                    <label class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-bold rounded-xl cursor-pointer hover:bg-blue-700">
+                                        <i class="fas fa-upload mr-2"></i>
+                                        Tải lên hình ảnh
+                                        <input type="file" class="hidden" accept="image/*">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-lg font-bold text-gray-700 mb-2">Các lựa chọn</label>
+                            <div class="space-y-3">
+                                <!-- Option A -->
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold">A</div>
+                                    <input type="text" class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Lựa chọn A">
+                                    <div class="ml-4">
+                                        <input type="radio" id="correct-${questionCount}-a" name="correct-${questionCount}" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500">
+                                        <label for="correct-${questionCount}-a" class="ml-2 text-gray-700">Đúng</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Option B -->
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold">B</div>
+                                    <input type="text" class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Lựa chọn B">
+                                    <div class="ml-4">
+                                        <input type="radio" id="correct-${questionCount}-b" name="correct-${questionCount}" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500">
+                                        <label for="correct-${questionCount}-b" class="ml-2 text-gray-700">Đúng</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Option C -->
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold">C</div>
+                                    <input type="text" class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Lựa chọn C">
+                                    <div class="ml-4">
+                                        <input type="radio" id="correct-${questionCount}-c" name="correct-${questionCount}" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500">
+                                        <label for="correct-${questionCount}-c" class="ml-2 text-gray-700">Đúng</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Option D -->
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-600 font-bold">D</div>
+                                    <input type="text" class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Lựa chọn D">
+                                    <div class="ml-4">
+                                        <input type="radio" id="correct-${questionCount}-d" name="correct-${questionCount}" class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500">
+                                        <label for="correct-${questionCount}-d" class="ml-2 text-gray-700">Đúng</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-lg font-bold text-gray-700 mb-2">Giải thích (tùy chọn)</label>
+                            <textarea class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Giải thích đáp án đúng" rows="2"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-lg font-bold text-gray-700 mb-2">Điểm</label>
+                            <input type="number" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg" placeholder="Số điểm cho câu hỏi này" value="100">
+                        </div>
+                    </div>
+                </div>
+                `;
+
+          // Insert the new question before the "Add Question" button
+          addQuestionInlineBtn.insertAdjacentHTML(
+            "beforebegin",
+            newQuestionHTML
+          );
+
+          // Add event listeners for delete buttons
+          setupDeleteButtons();
+        }
+
+        if (addQuestionBtn) {
+          addQuestionBtn.addEventListener("click", addNewQuestion);
+        }
+
+        if (addQuestionInlineBtn) {
+          addQuestionInlineBtn.addEventListener("click", addNewQuestion);
+        }
+
+        // Setup delete buttons for questions
+        function setupDeleteButtons() {
+          const deleteButtons = document.querySelectorAll(
+            ".question-card .fa-trash-alt"
+          );
+
+          deleteButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              const questionCard = this.closest(".question-card");
+
+              if (questionCard) {
+                // Confirm before deleting
+                if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này?")) {
+                  questionCard.remove();
+
+                  // Renumber the remaining questions
+                  const remainingQuestions =
+                    document.querySelectorAll(".question-card");
+                  remainingQuestions.forEach((question, index) => {
+                    const questionTitle = question.querySelector("h3");
+                    if (questionTitle) {
+                      questionTitle.textContent = `Câu hỏi ${index + 1}`;
+                    }
+                  });
+                }
+              }
+            });
+          });
+        }
+
+        // Initial setup
+        setupDeleteButtons();
+      });
+    </script>
+  </body>
+</html>

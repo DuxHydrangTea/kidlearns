@@ -1,0 +1,54 @@
+.floating {
+    animation: floating 3s ease-in-out infinite;
+}
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+.bounce {
+    animation: bounce 1s infinite;
+}
+@keyframes bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+.spin-slow {
+    animation: spin 15s linear infinite;
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.course-card {
+    transition: all 0.3s ease;
+}
+.course-card:hover {
+    transform: translateY(-8px);
+}
+.badge {
+    transition: all 0.3s ease;
+}
+.badge:hover {
+    transform: scale(1.1);
+}
+.hero-bg {
+    background-image: url("https://img.freepik.com/free-vector/hand-drawn-colorful-science-education-wallpaper_23-2148489183.jpg");
+    background-size: cover;
+    background-position: center;
+}

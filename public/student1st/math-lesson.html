@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Học Toán Vui - KidsLearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#fdf2f8",
+                100: "#fce7f3",
+                200: "#fbcfe8",
+                300: "#f9a8d4",
+                400: "#f472b6",
+                500: "#ec4899",
+                600: "#db2777",
+                700: "#be185d",
+                800: "#9d174d",
+                900: "#831843",
+              },
+              secondary: {
+                50: "#fffbeb",
+                100: "#fef3c7",
+                200: "#fde68a",
+                300: "#fcd34d",
+                400: "#fbbf24",
+                500: "#f59e0b",
+                600: "#d97706",
+                700: "#b45309",
+                800: "#92400e",
+                900: "#78350f",
+              },
+              accent: {
+                50: "#ecfdf5",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
+              },
+            },
+            borderRadius: {
+              xl: "1rem",
+              "2xl": "1.5rem",
+              "3xl": "2rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&display=swap");
+      body {
+        font-family: "Playwrite US Modern", cursive;
+      }
+      .slide-content {
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      }
+      .slide-content.active {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .slide-content:not(.active) {
+        opacity: 0;
+        display: none;
+      }
+      .progress-bar {
+        transition: width 0.3s ease;
+      }
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .bounce {
+        animation: bounce 1s infinite;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      .number-card {
+        transition: all 0.3s ease;
+      }
+      .number-card:hover {
+        transform: scale(1.05);
+      }
+      .correct-answer {
+        animation: correct 0.5s ease;
+      }
+      @keyframes correct {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+      .wrong-answer {
+        animation: wrong 0.5s ease;
+      }
+      @keyframes wrong {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20%,
+        60% {
+          transform: translateX(-5px);
+        }
+        40%,
+        80% {
+          transform: translateX(5px);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-md z-10">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="index.html" class="flex-shrink-0 flex items-center">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png"
+                alt="Logo"
+                class="w-10 h-10 mr-2"
+              />
+              <span class="text-primary-600 text-2xl font-bold"
+                >Kids<span class="text-secondary-500">Learn</span></span
+              >
+            </a>
+            <div class="ml-6 flex items-center">
+              <span class="text-gray-500 text-base">Bài học:</span>
+              <span class="ml-2 text-gray-900 font-bold"
+                >Học đếm số từ 1 đến 10</span
+              >
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <button
+              type="button"
+              class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <i class="fas fa-list-ul"></i>
+            </button>
+            <button
+              type="button"
+              class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <i class="fas fa-volume-up"></i>
+            </button>
+            <button
+              type="button"
+              class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <i class="fas fa-expand"></i>
+            </button>
+            <a
+              href="#"
+              class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <i class="fas fa-times"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="bg-gray-200 h-2 rounded-full mx-4 mt-2">
+      <div
+        id="progress-bar"
+        class="bg-primary-500 h-2 rounded-full progress-bar"
+        style="width: 20%"
+      ></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex overflow-hidden p-4">
+      <!-- Lesson Content -->
+      <div
+        class="flex-1 flex flex-col overflow-hidden bg-white rounded-2xl shadow-md"
+      >
+        <!-- Slide Content -->
+        <div class="flex-1 overflow-auto p-6">
+          <!-- Slide 1: Introduction -->
+          <div id="slide-1" class="slide-content active">
+            <div class="max-w-4xl mx-auto text-center">
+              <div class="mb-8">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3330/3330314.png"
+                  alt="Math"
+                  class="w-32 h-32 mx-auto floating"
+                />
+              </div>
+              <h2 class="text-3xl font-bold text-primary-600 mb-6">
+                Học đếm số từ 1 đến 10
+              </h2>
+              <div class="text-xl text-gray-700 mb-8">
+                <p>Chào mừng các bạn đến với bài học vui về các con số!</p>
+                <p class="mt-4">
+                  Hôm nay chúng ta sẽ học cách đếm từ 1 đến 10.
+                </p>
+              </div>
+
+              <div
+                class="bg-primary-50 rounded-xl p-6 border-2 border-primary-200 mb-8"
+              >
+                <div class="flex items-center justify-center mb-4">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+                    alt="Teacher"
+                    class="w-16 h-16 mr-4"
+                  />
+                  <div class="text-left">
+                    <p class="text-lg font-bold text-primary-700">Cô Hương:</p>
+                    <p class="text-lg text-gray-700">
+                      Các bạn hãy cùng cô khám phá thế giới của những con số
+                      nhé!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8">
+                <button
+                  id="start-btn"
+                  class="px-8 py-4 bg-secondary-500 text-white text-xl font-bold rounded-xl shadow-md hover:bg-secondary-600 transition-all"
+                >
+                  Bắt đầu học nào!
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2: Numbers 1-5 -->
+          <div id="slide-2" class="slide-content">
+            <div class="max-w-4xl mx-auto">
+              <h2 class="text-2xl font-bold text-primary-600 mb-6 text-center">
+                Các số từ 1 đến 5
+              </h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+                <div
+                  class="number-card bg-red-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(1)"
+                >
+                  <div class="text-6xl font-bold text-red-600 mb-2">1</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/3082/3082011.png"
+                    alt="One"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-red-600">Một</div>
+                </div>
+
+                <div
+                  class="number-card bg-blue-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(2)"
+                >
+                  <div class="text-6xl font-bold text-blue-600 mb-2">2</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/5266/5266711.png"
+                    alt="Two"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-blue-600">Hai</div>
+                </div>
+
+                <div
+                  class="number-card bg-green-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(3)"
+                >
+                  <div class="text-6xl font-bold text-green-600 mb-2">3</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2921/2921799.png"
+                    alt="Three"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-green-600">Ba</div>
+                </div>
+
+                <div
+                  class="number-card bg-yellow-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(4)"
+                >
+                  <div class="text-6xl font-bold text-yellow-600 mb-2">4</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2921/2921822.png"
+                    alt="Four"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-yellow-600">Bốn</div>
+                </div>
+
+                <div
+                  class="number-card bg-purple-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(5)"
+                >
+                  <div class="text-6xl font-bold text-purple-600 mb-2">5</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2921/2921825.png"
+                    alt="Five"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-purple-600">Năm</div>
+                </div>
+              </div>
+
+              <div
+                class="bg-primary-50 rounded-xl p-6 border-2 border-primary-200 mb-8"
+              >
+                <div class="flex items-center">
+                  <i
+                    class="fas fa-lightbulb text-secondary-500 text-2xl mr-4"
+                  ></i>
+                  <p class="text-lg text-gray-700">
+                    Nhấn vào mỗi số để nghe cách đọc và xem hình ảnh minh họa!
+                  </p>
+                </div>
+              </div>
+
+              <div class="text-center mt-8">
+                <p class="text-lg text-gray-700 mb-4">
+                  Hãy thử đếm từ 1 đến 5 theo thứ tự nhé!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 3: Numbers 6-10 -->
+          <div id="slide-3" class="slide-content">
+            <div class="max-w-4xl mx-auto">
+              <h2 class="text-2xl font-bold text-primary-600 mb-6 text-center">
+                Các số từ 6 đến 10
+              </h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+                <div
+                  class="number-card bg-pink-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(6)"
+                >
+                  <div class="text-6xl font-bold text-pink-600 mb-2">6</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2921/2921802.png"
+                    alt="Six"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-pink-600">Sáu</div>
+                </div>
+
+                <div
+                  class="number-card bg-indigo-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(7)"
+                >
+                  <div class="text-6xl font-bold text-indigo-600 mb-2">7</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2921/2921801.png"
+                    alt="Seven"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-indigo-600">Bảy</div>
+                </div>
+
+                <div
+                  class="number-card bg-teal-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(8)"
+                >
+                  <div class="text-6xl font-bold text-teal-600 mb-2">8</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2921/2921789.png"
+                    alt="Eight"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-teal-600">Tám</div>
+                </div>
+
+                <div
+                  class="number-card bg-orange-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(9)"
+                >
+                  <div class="text-6xl font-bold text-orange-600 mb-2">9</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2921/2921788.png"
+                    alt="Nine"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-orange-600">Chín</div>
+                </div>
+
+                <div
+                  class="number-card bg-red-100 rounded-xl p-4 flex flex-col items-center cursor-pointer"
+                  onclick="playNumberSound(10)"
+                >
+                  <div class="text-6xl font-bold text-red-600 mb-2">10</div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/3551/3551496.png"
+                    alt="Ten"
+                    class="w-24 h-24 mb-2"
+                  />
+                  <div class="text-xl font-bold text-red-600">Mười</div>
+                </div>
+              </div>
+
+              <div
+                class="bg-primary-50 rounded-xl p-6 border-2 border-primary-200 mb-8"
+              >
+                <div class="flex items-center">
+                  <i
+                    class="fas fa-lightbulb text-secondary-500 text-2xl mr-4"
+                  ></i>
+                  <p class="text-lg text-gray-700">
+                    Nhấn vào mỗi số để nghe cách đọc và xem hình ảnh minh họa!
+                  </p>
+                </div>
+              </div>
+
+              <div class="text-center mt-8">
+                <p class="text-lg text-gray-700 mb-4">
+                  Hãy thử đếm từ 6 đến 10 theo thứ tự nhé!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 4: Counting Exercise -->
+          <div id="slide-4" class="slide-content">
+            <div class="max-w-4xl mx-auto">
+              <h2 class="text-2xl font-bold text-primary-600 mb-6 text-center">
+                Bài tập đếm số
+              </h2>
+
+              <div
+                class="bg-white rounded-xl p-6 border-2 border-primary-200 mb-8"
+              >
+                <div class="text-center mb-6">
+                  <p class="text-xl font-bold text-gray-800">
+                    Có bao nhiêu quả táo?
+                  </p>
+                </div>
+
+                <div class="flex justify-center mb-8">
+                  <div class="grid grid-cols-3 gap-4">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/415/415682.png"
+                      alt="Apple"
+                      class="w-20 h-20"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/415/415682.png"
+                      alt="Apple"
+                      class="w-20 h-20"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/415/415682.png"
+                      alt="Apple"
+                      class="w-20 h-20"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/415/415682.png"
+                      alt="Apple"
+                      class="w-20 h-20"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/415/415682.png"
+                      alt="Apple"
+                      class="w-20 h-20"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                  <button
+                    class="answer-btn py-3 px-6 bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold rounded-xl text-xl"
+                    data-value="4"
+                  >
+                    4
+                  </button>
+                  <button
+                    class="answer-btn py-3 px-6 bg-green-100 hover:bg-green-200 text-green-800 font-bold rounded-xl text-xl"
+                    data-value="5"
+                  >
+                    5
+                  </button>
+                  <button
+                    class="answer-btn py-3 px-6 bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold rounded-xl text-xl"
+                    data-value="6"
+                  >
+                    6
+                  </button>
+                </div>
+
+                <div id="answer-feedback" class="mt-6 text-center hidden">
+                  <div
+                    id="correct-answer"
+                    class="bg-green-100 text-green-800 p-4 rounded-xl hidden"
+                  >
+                    <i
+                      class="fas fa-check-circle text-green-600 text-2xl mr-2"
+                    ></i>
+                    <span class="text-xl font-bold"
+                      >Đúng rồi! Có 5 quả táo.</span
+                    >
+                  </div>
+                  <div
+                    id="wrong-answer"
+                    class="bg-red-100 text-red-800 p-4 rounded-xl hidden"
+                  >
+                    <i
+                      class="fas fa-times-circle text-red-600 text-2xl mr-2"
+                    ></i>
+                    <span class="text-xl font-bold"
+                      >Chưa đúng! Hãy đếm lại nhé.</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="bg-white rounded-xl p-6 border-2 border-primary-200 mb-8"
+              >
+                <div class="text-center mb-6">
+                  <p class="text-xl font-bold text-gray-800">
+                    Có bao nhiêu con vịt?
+                  </p>
+                </div>
+
+                <div class="flex justify-center mb-8">
+                  <div class="grid grid-cols-4 gap-4">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1864/1864470.png"
+                      alt="Duck"
+                      class="w-16 h-16"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1864/1864470.png"
+                      alt="Duck"
+                      class="w-16 h-16"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1864/1864470.png"
+                      alt="Duck"
+                      class="w-16 h-16"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1864/1864470.png"
+                      alt="Duck"
+                      class="w-16 h-16"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1864/1864470.png"
+                      alt="Duck"
+                      class="w-16 h-16"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1864/1864470.png"
+                      alt="Duck"
+                      class="w-16 h-16"
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1864/1864470.png"
+                      alt="Duck"
+                      class="w-16 h-16"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                  <button
+                    class="answer-btn-2 py-3 px-6 bg-pink-100 hover:bg-pink-200 text-pink-800 font-bold rounded-xl text-xl"
+                    data-value="6"
+                  >
+                    6
+                  </button>
+                  <button
+                    class="answer-btn-2 py-3 px-6 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold rounded-xl text-xl"
+                    data-value="7"
+                  >
+                    7
+                  </button>
+                  <button
+                    class="answer-btn-2 py-3 px-6 bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold rounded-xl text-xl"
+                    data-value="8"
+                  >
+                    8
+                  </button>
+                </div>
+
+                <div id="answer-feedback-2" class="mt-6 text-center hidden">
+                  <div
+                    id="correct-answer-2"
+                    class="bg-green-100 text-green-800 p-4 rounded-xl hidden"
+                  >
+                    <i
+                      class="fas fa-check-circle text-green-600 text-2xl mr-2"
+                    ></i>
+                    <span class="text-xl font-bold"
+                      >Đúng rồi! Có 7 con vịt.</span
+                    >
+                  </div>
+                  <div
+                    id="wrong-answer-2"
+                    class="bg-red-100 text-red-800 p-4 rounded-xl hidden"
+                  >
+                    <i
+                      class="fas fa-times-circle text-red-600 text-2xl mr-2"
+                    ></i>
+                    <span class="text-xl font-bold"
+                      >Chưa đúng! Hãy đếm lại nhé.</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 5: Completion -->
+          <div id="slide-5" class="slide-content">
+            <div class="max-w-4xl mx-auto text-center">
+              <div class="mb-8">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  alt="Badge"
+                  class="w-40 h-40 mx-auto floating"
+                />
+              </div>
+              <h2 class="text-3xl font-bold text-primary-600 mb-6">
+                Chúc mừng bạn!
+              </h2>
+              <div class="text-xl text-gray-700 mb-8">
+                <p>Bạn đã hoàn thành bài học đếm số từ 1 đến 10!</p>
+                <p class="mt-4">
+                  Bạn đã nhận được huy hiệu "Siêu sao Toán học"
+                </p>
+              </div>
+
+              <div
+                class="bg-primary-50 rounded-xl p-6 border-2 border-primary-200 mb-8"
+              >
+                <div class="flex items-center justify-center mb-4">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/4090/4090217.png"
+                    alt="Teacher"
+                    class="w-16 h-16 mr-4"
+                  />
+                  <div class="text-left">
+                    <p class="text-lg font-bold text-primary-700">Cô Hương:</p>
+                    <p class="text-lg text-gray-700">
+                      Bạn đã làm rất tốt! Hãy tiếp tục học các bài học khác nhé!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 flex justify-center space-x-4">
+                <button
+                  class="px-6 py-3 bg-secondary-500 text-white text-lg font-bold rounded-xl shadow-md hover:bg-secondary-600 transition-all"
+                >
+                  <i class="fas fa-redo mr-2"></i>
+                  Học lại
+                </button>
+                <button
+                  class="px-6 py-3 bg-primary-600 text-white text-lg font-bold rounded-xl shadow-md hover:bg-primary-700 transition-all"
+                >
+                  <i class="fas fa-arrow-right mr-2"></i>
+                  Bài học tiếp theo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="bg-white border-t border-gray-200 px-6 py-4">
+          <div class="flex items-center justify-between">
+            <button
+              id="prev-btn"
+              class="inline-flex items-center px-6 py-3 border-2 border-primary-300 shadow-sm text-lg font-bold rounded-xl text-primary-600 bg-white hover:bg-primary-50 focus:outline-none"
+            >
+              <i class="fas fa-chevron-left mr-2"></i>
+              Quay lại
+            </button>
+            <div class="text-base text-gray-500">
+              Trang <span id="current-slide">1</span> /
+              <span id="total-slides">5</span>
+            </div>
+            <button
+              id="next-btn"
+              class="inline-flex items-center px-6 py-3 border-2 border-primary-500 shadow-sm text-lg font-bold rounded-xl text-white bg-primary-500 hover:bg-primary-600 focus:outline-none"
+            >
+              Tiếp theo
+              <i class="fas fa-chevron-right ml-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Slide navigation
+      let currentSlide = 1;
+      const totalSlides = 5;
+
+      document.getElementById("current-slide").textContent = currentSlide;
+      document.getElementById("total-slides").textContent = totalSlides;
+
+      function showSlide(slideNumber) {
+        // Hide all slides
+        document.querySelectorAll(".slide-content").forEach((slide) => {
+          slide.classList.remove("active");
+        });
+
+        // Show the selected slide
+        document.getElementById(`slide-${slideNumber}`).classList.add("active");
+
+        // Update slide counter
+        document.getElementById("current-slide").textContent = slideNumber;
+
+        // Update progress bar
+        const progressPercentage = (slideNumber / totalSlides) * 100;
+        document.getElementById(
+          "progress-bar"
+        ).style.width = `${progressPercentage}%`;
+
+        // Enable/disable navigation buttons
+        document.getElementById("prev-btn").disabled = slideNumber === 1;
+        document.getElementById("next-btn").disabled =
+          slideNumber === totalSlides;
+
+        // Update button styles
+        if (slideNumber === 1) {
+          document
+            .getElementById("prev-btn")
+            .classList.add("opacity-50", "cursor-not-allowed");
+        } else {
+          document
+            .getElementById("prev-btn")
+            .classList.remove("opacity-50", "cursor-not-allowed");
+        }
+
+        if (slideNumber === totalSlides) {
+          document
+            .getElementById("next-btn")
+            .classList.add("opacity-50", "cursor-not-allowed");
+        } else {
+          document
+            .getElementById("next-btn")
+            .classList.remove("opacity-50", "cursor-not-allowed");
+        }
+      }
+
+      document
+        .getElementById("prev-btn")
+        .addEventListener("click", function () {
+          if (currentSlide > 1) {
+            currentSlide--;
+            showSlide(currentSlide);
+          }
+        });
+
+      document
+        .getElementById("next-btn")
+        .addEventListener("click", function () {
+          if (currentSlide < totalSlides) {
+            currentSlide++;
+            showSlide(currentSlide);
+          }
+        });
+
+      document
+        .getElementById("start-btn")
+        .addEventListener("click", function () {
+          currentSlide = 2;
+          showSlide(currentSlide);
+        });
+
+      // Number sound function (placeholder)
+      function playNumberSound(number) {
+        console.log(`Playing sound for number ${number}`);
+        // In a real implementation, this would play an audio file
+        alert(`Số ${number}!`);
+      }
+
+      // Exercise 1 answer checking
+      document.querySelectorAll(".answer-btn").forEach((button) => {
+        button.addEventListener("click", function () {
+          const value = parseInt(this.getAttribute("data-value"));
+          const feedback = document.getElementById("answer-feedback");
+          const correctFeedback = document.getElementById("correct-answer");
+          const wrongFeedback = document.getElementById("wrong-answer");
+
+          feedback.classList.remove("hidden");
+
+          if (value === 5) {
+            // Correct answer
+            correctFeedback.classList.remove("hidden");
+            wrongFeedback.classList.add("hidden");
+            this.classList.add("correct-answer");
+            this.classList.add("bg-green-200");
+            this.classList.add("text-green-800");
+          } else {
+            // Wrong answer
+            correctFeedback.classList.add("hidden");
+            wrongFeedback.classList.remove("hidden");
+            this.classList.add("wrong-answer");
+            this.classList.add("bg-red-200");
+            this.classList.add("text-red-800");
+          }
+        });
+      });
+
+      // Exercise 2 answer checking
+      document.querySelectorAll(".answer-btn-2").forEach((button) => {
+        button.addEventListener("click", function () {
+          const value = parseInt(this.getAttribute("data-value"));
+          const feedback = document.getElementById("answer-feedback-2");
+          const correctFeedback = document.getElementById("correct-answer-2");
+          const wrongFeedback = document.getElementById("wrong-answer-2");
+
+          feedback.classList.remove("hidden");
+
+          if (value === 7) {
+            // Correct answer
+            correctFeedback.classList.remove("hidden");
+            wrongFeedback.classList.add("hidden");
+            this.classList.add("correct-answer");
+            this.classList.add("bg-green-200");
+            this.classList.add("text-green-800");
+          } else {
+            // Wrong answer
+            correctFeedback.classList.add("hidden");
+            wrongFeedback.classList.remove("hidden");
+            this.classList.add("wrong-answer");
+            this.classList.add("bg-red-200");
+            this.classList.add("text-red-800");
+          }
+        });
+      });
+
+      // Keyboard navigation
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowLeft") {
+          if (currentSlide > 1) {
+            currentSlide--;
+            showSlide(currentSlide);
+          }
+        } else if (event.key === "ArrowRight") {
+          if (currentSlide < totalSlides) {
+            currentSlide++;
+            showSlide(currentSlide);
+          }
+        }
+      });
+
+      // Initialize
+      showSlide(currentSlide);
+    </script>
+  </body>
+</html>
