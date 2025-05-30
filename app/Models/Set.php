@@ -19,4 +19,5 @@ class Set extends Model
     public function scopeByLesson($query, $lessonId){
         return $query->where('lesson_id', $lessonId);
     }
+
 }

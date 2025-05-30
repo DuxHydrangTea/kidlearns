@@ -89,6 +89,19 @@
             }
         })
     </script>
+
+    <script>
+        // Lấy đường dẫn ảnh lỗi từ blade
+        const defaultImg = "{{ asset('assets/images/failed.gif') }}";
+        document.addEventListener("DOMContentLoaded", function() {
+            const imgs = document.querySelectorAll("img");
+            imgs.forEach(img => {
+                img.addEventListener("error", function() {
+                    this.setAttribute('src',defaultImg);
+                });
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 

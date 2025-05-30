@@ -17,5 +17,9 @@ class LessonExamHistory extends Model
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }
+
+    public function set(){
+        return $this->belongsTo(Set::class,'set_id','id');
+    } 
     
 }

@@ -43,12 +43,18 @@
                                 <img src="{{ asset($user->avatar) }}" alt="" class="w-10 h-10 rounded-full object-cover">
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-900">{{ $user->role == 99 ? "Super Admin" : "Thành viên" }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">
+                            {{-- {{ $user->role == 99 ? "Super Admin" : "Thành viên" }} --}}
+                            <select name="role" data-user-id="{{$user->id}}"  class="border-2 border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="0">Người dùng</option>
+                                <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>Giáo viên</option>
+                                <option value="2" {{ $user->role == 2 ? 'selected' : '' }}>Học sinh</option>
+                                <option value="99" {{ $user->role == 99 ? 'selected' : '' }}>Quản trị viên</option>
+                            </select>
+                        </td>
                         <td class="px-4 py-3 text-sm">
                             <div class="flex items-center space-x-2">
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="text-blue-600 hover:text-blue-800">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                              
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -65,4 +71,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    const roleSelects = document.querySelectorAll('select[name="role"]');
+    
+    roleSelects.forEach(select => {
+         const userId = select.getAttribute('data-user-id');
+        select.addEventListener('change', function() {
+            const newRole = this.value;
+
+            var url = '/admin/users/change-role?user_id=' + userId + '&role_id=' + newRole;
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+               
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
 @endsection

@@ -13,6 +13,7 @@ use App\Http\Controllers\ClientLessonTypeController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\LessonProgressController;
@@ -141,6 +142,15 @@ Route::middleware('auth_member')->group(
         ], function () {
             Route::get('/{id}', 'index')->name('class.index');
         });
+
+        Route::group([
+            'controller' => HistoryController::class,
+            'prefix' => '/history',
+        ], function () {
+            Route::get('/my-history', 'myHistory')->name('history.my_history');
+            Route::get('/other-history', 'otherHistory')->name('history.other_history');
+        });
+        
     }
 );
 
@@ -156,6 +166,7 @@ Route::group(
         'middleware' => 'auth_member',
     ],
     function () {
+        Route::get('users/change-role/', [UserController::class, 'changeRole'])->name('users.change_role');
         Route::resource('users', UserController::class);
         Route::resource('classes', ClassController::class);
         Route::resource('classes', ClassController::class);

@@ -30,7 +30,7 @@
                     <div>
                         <p class="text-gray-600">Câu hỏi</p>
                         <p class="text-xl font-bold"><span id="current-question" class="text-indigo-600">1</span> / <span
-                                id="total-questions">10</span></p>
+                                id="total-questions">{{count($exams)}}</span></p>
                     </div>
                 </div>
             </div>

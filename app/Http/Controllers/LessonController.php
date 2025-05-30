@@ -20,7 +20,7 @@ class LessonController extends Controller
 {
     use FileHandle;
     //
-    public function create()
+    public function create(Request $request)
     {
         // courses 
         // lessons
@@ -29,7 +29,12 @@ class LessonController extends Controller
         $classes = ClassModel::all();
         $subjects = Subject::all();
         $lessonTypes = LessonType::all();
-        return view('client.lesson.create', compact('lessonTypes', 'courses', 'classes', 'subjects'));
+        if ($request->has('lessonTypeId')) {
+            $lessonType = LessonType::find($request->lessonTypeId);
+        } else {
+            $lessonType = null;
+        }
+        return view('client.lesson.create', compact('lessonTypes', 'courses', 'classes', 'subjects', 'lessonType'));
     }
 
     public function store(Request $request)

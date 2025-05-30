@@ -30,4 +30,23 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.users.index');
     }
+
+    public function changeRole(Request $request){
+        $user_id = $request->user_id;
+        $role_id = $request->role_id;
+        
+        $user = \App\Models\User::find($user_id);
+        if ($user) {
+            $user->role = $role_id;
+            $user->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User role updated successfully.',
+            ]);
+        }
+        return response()->json([
+            'status' => 'error',
+            'message' => 'User not found.',
+        ], 404);
+    }
 }

@@ -2,7 +2,7 @@
   $indexMenu = isset($indexMenu) ? $indexMenu : 1;
 @endphp
 <header class="bg-white shadow-md sticky top-0 z-50" x-data="{dialog: false}">
-    <div class="absolute p-3 w-[900px] shadow-2xl left-1/2 translate-x-[-50%] top-full bg-white border-2 border-gray-200 rounded-2xl"  x-show="dialog" x-transition.duration.500ms
+    <div class="absolute p-3 w-[900px] shadow-2xl left-1/2 translate-x-[-50%] top-full bg-white border-2 border-gray-200 rounded-2xl"  x-show="dialog"
     @click.away="dialog = false"
     >
         <button class=" w-[50px] h-[50px] absolute right-[1rem] top-[1rem] outline-none hover:text-primary-600" @click="dialog = !dialog" >
@@ -118,22 +118,32 @@
                         </button>
 
                         <!-- Dropdown menu -->
-                        <div x-show.transition="open" @click.away="open = false" x-transition.duration.500ms
+                        <div x-show.transition="open" @click.away="open = false" 
                             class="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
-                            <button @click="dialog = !dialog, open = !open" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            <button @click="dialog = !dialog, open = !open" class=" w-full flex items-center gap-2 justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 role="menuitem">
                                 <i class="fas fa-user"></i>
                                 <span>Chỉnh sửa thông tin tài khoản</span>
                             </button>
 
-                            @role(99)
-                                <a href="{{route('admin.classes.index')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">
-                                    <i class="fas fa-user"></i>
-                                    <span>Trang quản trị</span>
-                                </a>
+                            <a href="{{route('history.my_history')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full">
+                                <i class="fas fa-chart-line"></i>
+                               Việc học của tôi
+                            </a>
+
                             
+                            @role(99)
+                            <a href="{{route('history.other_history')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full">
+                                <i class="fas fa-chart-line"></i>
+                               Tiến trình học sinh
+                            </a>
+                            
+                            <a href="{{route('admin.classes.index')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                role="menuitem">
+                                <i class="fas fa-user"></i>
+                                <span>Trang quản trị</span>
+                            </a>
                            
                             <div href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 relative group"
                                 role="menuitem">

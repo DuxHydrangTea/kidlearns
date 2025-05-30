@@ -154,27 +154,28 @@
                 </button>
             </div>
         </div>
-
         <!-- Tab Content -->
         <div class="tab-content active" id="basic-info">
             <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 mb-8">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Thông tin cơ bản</h2>
 
                 <div class="space-y-6">
-
                     <div>
                         <label for="lesson_type_id" class="block text-lg font-bold text-gray-700 mb-2">Chọn serie (chương)
                             môn học <span class="text-red-500">*</span></label>
                         <input type="text" hidden value="{{ request('lesson_type_id') }}" name="lesson_type_id">
                         <select id="lesson_type_id" name="lesson_type_id" disabled
                             class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg">
-                            @foreach ($lessonTypes as $lessonType)
-                                <option value="{{ $lessonType->id }}"
-                                    {{ request('lesson_type_id') == $lessonType->id ? 'selected' : '' }}>
-                                    {{ $lessonType->name }}</option>
+                            @foreach ($lessonTypes as $lt)
+                                <option value="{{ $lt->id }}"
+                                    {{ $lessonType?->id ?? 0 == $lt->id ? 'selected' : '' }}>
+                                    {{ $lt->name }}</option>
                             @endforeach
                         </select>
                     </div>
+
+                    <input type="hidden" name="lesson_type_id" value="{{ request('lessonTypeId') }}">
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="lesson-subject" class="block text-lg font-bold text-gray-700 mb-2">Môn học <span
