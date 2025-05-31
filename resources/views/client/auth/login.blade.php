@@ -341,7 +341,7 @@
                     name="role"
                     class="block w-full px-4 py-3 border-2 border-primary-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300 text-lg"
                   >
-                    <option value="1">Trẻ em</option>
+                    <option value="1">Học sinh</option>
                     <option value="2">Giáo viên</option>
                   </select>
                 </div>

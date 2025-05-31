@@ -141,7 +141,7 @@
                             class="w-10 object-cover h-10 rounded-full mr-3 border-2 border-primary-300">
                         <div>
                             <h3 class="text-lg font-bold text-gray-900">{{ $lesson->user->name }}</h3>
-                            <div class="text-sm text-gray-500">Giáo viên Toán • Cập nhật {{ $lesson->updated_at }}</div>
+                            <div class="text-sm text-gray-500">Quản trị viên • Cập nhật {{ $lesson->updated_at }}</div>
                         </div>
                     </div>
                 </div>

@@ -47,8 +47,8 @@
                             {{-- {{ $user->role == 99 ? "Super Admin" : "Thành viên" }} --}}
                             <select name="role" data-user-id="{{$user->id}}"  class="border-2 border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="0">Người dùng</option>
-                                <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>Giáo viên</option>
-                                <option value="2" {{ $user->role == 2 ? 'selected' : '' }}>Học sinh</option>
+                                <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>Học sinh</option>
+                                <option value="2" {{ $user->role == 2 ? 'selected' : '' }}>Giáo viên</option>
                                 <option value="99" {{ $user->role == 99 ? 'selected' : '' }}>Quản trị viên</option>
                             </select>
                         </td>

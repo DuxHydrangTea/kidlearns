@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->avatar ? asset('storage/'.$this->avatar) : asset('images/default-avatar.png');
     }
+
+    public function lessonProgresses()
+    {
+        return $this->hasMany(LessonProgress::class);
+    }
 }

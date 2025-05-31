@@ -50,20 +50,20 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div class="bg-primary-50 rounded-2xl p-6 border-2 border-primary-100">
-                    <div class="text-4xl font-bold text-primary-600 mb-2">12</div>
+                    <div class="text-4xl font-bold text-primary-600 mb-2">{{$finishedLesson}}</div>
                     <div class="text-lg text-gray-700">Bài học đã hoàn thành</div>
                 </div>
                 <div class="bg-secondary-50 rounded-2xl p-6 border-2 border-secondary-100">
-                    <div class="text-4xl font-bold text-secondary-600 mb-2">5</div>
-                    <div class="text-lg text-gray-700">Huy hiệu đã nhận</div>
+                    <div class="text-4xl font-bold text-secondary-600 mb-2">{{$total_count}}</div>
+                    <div class="text-lg text-gray-700">Bài kiểm tra đã làm</div>
                 </div>
                 <div class="bg-accent-50 rounded-2xl p-6 border-2 border-accent-100">
-                    <div class="text-4xl font-bold text-accent-600 mb-2">320</div>
+                    <div class="text-4xl font-bold text-accent-600 mb-2">{{$total_score}}</div>
                     <div class="text-lg text-gray-700">Điểm số</div>
                 </div>
                 <div class="bg-purple-50 rounded-2xl p-6 border-2 border-purple-100">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">8</div>
-                    <div class="text-lg text-gray-700">Ngày học liên tiếp</div>
+                    <div class="text-4xl font-bold text-purple-600 mb-2">xxx</div>
+                    <div class="text-lg text-gray-700">Số thành tựu đã nhận</div>
                 </div>
             </div>
         </div>
@@ -104,9 +104,9 @@
                         </h3>
                         <div class="flex items-center text-sm text-gray-500 mb-4">
                             <i class="fas fa-book mr-2"></i>
-                            <span>12 bài học</span>
+                            <span>{{$lesson->lessonType?->name}}</span>
                             <i class="fas fa-clock ml-4 mr-2"></i>
-                            <span>45 phút</span>
+                            <span>{{$lesson->duration}} phút</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
                             <div class="bg-secondary-500 h-2.5 rounded-full" style="width: {{$lesson->myLessonProgress?->progress}}%"></div>

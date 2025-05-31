@@ -10,7 +10,7 @@ class LessonType extends Model
     protected $guarded = [];
 
     public function lessons(){
-        return $this->hasMany(Lesson::class)->orderBy('order', 'asc');
+        return $this->hasMany(Lesson::class)->orderBy('id', 'asc');
     }
 
     public function user()
