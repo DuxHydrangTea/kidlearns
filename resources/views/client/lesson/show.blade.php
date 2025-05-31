@@ -4,6 +4,105 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <style>
+        * {
+            box-sizing: border-box
+        }
+
+        /* Slideshow container */
+        .slideshow-container {
+            max-width: 1000px;
+            position: relative;
+            margin: auto;
+        }
+
+        /* Hide the images by default */
+        .mySlides {
+            display: none;
+        }
+
+        /* Next & previous buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Caption text */
+        .text {
+            color: #f2f2f2;
+            font-size: 15px;
+            padding: 8px 12px;
+            position: absolute;
+            bottom: 8px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Number text (1/3 etc) */
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
+
+        /* The dots/bullets/indicators */
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .active,
+        .dot:hover {
+            background-color: #717171;
+        }
+
+        /* Fading animation */
+        .fade {
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: .4
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+    </style>
+    <style>
         .floating {
             animation: floating 3s ease-in-out infinite;
         }
@@ -109,11 +208,11 @@
                     <i class="fas fa-home"></i>
                 </a>
                 <span class="mx-2 text-gray-400">/</span>
-                <a href="#" class="text-gray-600 hover:text-primary-600">{{$lesson->lessonType?->class?->name}}</a>
+                <a href="#" class="text-gray-600 hover:text-primary-600">{{ $lesson->lessonType?->class?->name }}</a>
                 <span class="mx-2 text-gray-400">/</span>
                 <a href="#" class="text-gray-600 hover:text-primary-600">{{ $lesson->lessonType?->name }}</a>
                 <span class="mx-2 text-gray-400">/</span>
-                <span class="text-primary-600 font-bold">{{$lesson->title}}</span>
+                <span class="text-primary-600 font-bold">{{ $lesson->title }}</span>
             </div>
         </div>
     </div>
@@ -150,6 +249,26 @@
                     <img src="{{ asset('assets/images/panda.gif') }}" class="absolute right-0 bottom-0 w-[50px]"
                         alt="">
                 </div>
+
+                <div class="flex mb-5 border-b-8 border-primary-600">
+                    @if ($lesson->zip_path)
+                        <button data-tab-id="zip-container"
+                            class="hover:bg-primary-600 hover:text-white bg-primary-600 text-white px-5 py-2  ">Video</button>
+                    @endif
+
+                    @if ($lesson->video_path)
+                        <button data-tab-id="video-container"
+                            class="hover:bg-primary-600 hover:text-white text-primary-600 bg-transparent px-5 py-2">Bài
+                            giảng</button>
+                    @endif
+
+                    @if ($lesson->image_paths)
+                        <button data-tab-id="images-container"
+                            class="hover:bg-primary-600 hover:text-white text-primary-600 bg-transparent px-5 py-2  ">Hình
+                            ảnh</button>
+                    @endif
+
+                </div>
                 <!-- Lesson Title and Info -->
                 <div class="mb-6">
                     <div class="flex items-center mb-2">
@@ -165,51 +284,86 @@
 
                 <!-- Video Player -->
                 <div class="bg-white rounded-2xl shadow-md overflow-hidden mb-8">
-                    <div class="video-container">
-                        @if ($lesson->isVideoMp4())
-                            <video id="player" class="plyr__video-embed" poster="{{ $lesson->thumbnail }}" playsinline
-                                controls
-                                data-poster="https://img.freepik.com/free-vector/hand-drawn-colorful-math-background_23-2148157266.jpg">
-                                <source src="{{ asset($lesson->video_path) }}" type="video/mp4" />
-                                <track kind="captions" label="Tiếng Việt"
-                                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
-                                    srclang="vi" default />
-                            </video>
-                        @else
-                            <iframe src="{{ asset($lesson->video_path) }}/res/index.html" style="zoom: 1.5"></iframe>
-                        @endif
-                    </div>
-
-                    <!-- Video Controls -->
-                    <div class="p-4 border-t border-gray-100">
-                        <div class="flex flex-wrap justify-between items-center">
-                            <div class="flex space-x-4">
-                                <button class="flex items-center text-gray-700 hover:text-primary-600">
-                                    <i class="fas fa-thumbs-up mr-1"></i>
-                                    <span>Thích</span>
-                                </button>
-                                <button class="flex items-center text-gray-700 hover:text-primary-600">
-                                    <i class="fas fa-bookmark mr-1"></i>
-                                    <span>Lưu</span>
-                                </button>
-                                <button class="flex items-center text-gray-700 hover:text-primary-600">
-                                    <i class="fas fa-share-alt mr-1"></i>
-                                    <span>Chia sẻ</span>
-                                </button>
+                    @if ($lesson->zip_path)
+                        <div tab-id="zip-container" id="zip-container">
+                            <iframe src="{{ asset($lesson->zip_path) }}/res/index.html" style="zoom: 1.5"
+                                class="w-full h-auto"></iframe>
+                        </div>
+                    @endif
+                    @if ($lesson->video_path)
+                        <div class="video-container hidden" tab-id="video-container">
+                            <div class="">
+                                <video id="player" class="plyr__video-embed" poster="{{ $lesson->thumbnail }}"
+                                    playsinline controls
+                                    data-poster="https://img.freepik.com/free-vector/hand-drawn-colorful-math-background_23-2148157266.jpg">
+                                    <source src="{{ asset($lesson->video_path) }}" type="video/mp4" />
+                                    <track kind="captions" label="Tiếng Việt"
+                                        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
+                                        srclang="vi" default />
+                                </video>
+                                <!-- Video Controls -->
+                                <div class="p-4 border-t border-gray-100">
+                                    <div class="flex flex-wrap justify-between items-center">
+                                        <div class="flex space-x-4">
+                                            <button class="flex items-center text-gray-700 hover:text-primary-600">
+                                                <i class="fas fa-thumbs-up mr-1"></i>
+                                                <span>Thích</span>
+                                            </button>
+                                            <button class="flex items-center text-gray-700 hover:text-primary-600">
+                                                <i class="fas fa-bookmark mr-1"></i>
+                                                <span>Lưu</span>
+                                            </button>
+                                            <button class="flex items-center text-gray-700 hover:text-primary-600">
+                                                <i class="fas fa-share-alt mr-1"></i>
+                                                <span>Chia sẻ</span>
+                                            </button>
+                                        </div>
+                                        <div class="flex items-center mt-2 sm:mt-0">
+                                            <span class="text-gray-600 mr-2">Tốc độ:</span>
+                                            <select id="speed-selector" class="bg-gray-100 rounded-lg px-2 py-1 text-sm">
+                                                <option value="0.5">0.5x</option>
+                                                <option value="0.75">0.75x</option>
+                                                <option value="1" selected>1x</option>
+                                                <option value="1.25">1.25x</option>
+                                                <option value="1.5">1.5x</option>
+                                                <option value="2">2x</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex items-center mt-2 sm:mt-0">
-                                <span class="text-gray-600 mr-2">Tốc độ:</span>
-                                <select id="speed-selector" class="bg-gray-100 rounded-lg px-2 py-1 text-sm">
-                                    <option value="0.5">0.5x</option>
-                                    <option value="0.75">0.75x</option>
-                                    <option value="1" selected>1x</option>
-                                    <option value="1.25">1.25x</option>
-                                    <option value="1.5">1.5x</option>
-                                    <option value="2">2x</option>
-                                </select>
+
+                        </div>
+                    @endif
+                    @if ($lesson->image_paths)
+                        <div tab-id="images-container" id="images-container" class="hidden">
+                            <!-- Slideshow container -->
+                            <div class="slideshow-container">
+
+                                <!-- Full-width images with number and caption text -->
+                                @foreach (json_decode($lesson->image_paths ?? '') as $index => $image)
+                                    <div class="mySlides fade">
+                                        <div class="numbertext">{{ $index + 1 }} / {{ count(json_decode($lesson->image_paths ?? '')) }}</div>
+                                        <img src="{{ asset($image) }}" style="width:100%">
+                                        <div class="text">{{$lesson->images_title}}</div>
+                                    </div>
+                                @endforeach
+                                <!-- Next and previous buttons -->
+                                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                            </div>
+                            <br>
+
+                            <!-- The dots/circles -->
+                            <div style="text-align:center">
+                                @foreach (json_decode($lesson->image_paths ?? '') as $index => $image)
+                                    <span class="dot" onclick="currentSlide({{ $index + 1 }})"></span>
+                                @endforeach
                             </div>
                         </div>
-                    </div>
+                    @endif
+
+
                 </div>
 
                 <!-- Lesson Description -->
@@ -239,7 +393,8 @@
                                     <form action="{{ route('download.download') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="file" value="{{ $document->resource_file }}">
-                                        <button class="px-3 py-1 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+                                        <button
+                                            class="px-3 py-1 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
                                             <i class="fas fa-download mr-1"></i> Tải xuống
                                         </button>
                                     </form>
@@ -456,7 +611,7 @@
                     <div class="bg-white rounded-2xl shadow-md overflow-hidden">
                         <div class="bg-primary-50 p-4 border-b border-gray-200 flex justify-between items-center">
                             <h3 class="text-xl font-bold text-gray-900">Bài học</h3>
-                            <a href="{{ route('lession.create', ['lessonTypeId' => $lesson->lessonType?->id]) }}"
+                            <a href="{{ route('lession.create', ['lesson_type_id' => $lesson->lessonType?->id]) }}"
                                 class="inline-flex gap-2 items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">Thêm
                                 bài mới</a>
                         </div>
@@ -729,7 +884,7 @@
         document.addEventListener('DOMContentLoaded', function() {
 
             // với duration = 20 thì cứ 20 phút sẽ tăng 10% tiến độ rồi đưa vào timeout
-            const duration =  {{ $lesson->duration ?? 20 }};
+            const duration = {{ $lesson->duration ?? 20 }};
             setInterval(() => {
                 const progress = parseInt(document.getElementById('progess-value').getAttribute(
                     'data-progress'), 10);
@@ -750,7 +905,7 @@
                             .progress + '%';
                     })
 
-            }, (duration/ 10) * 60 * 1000);
+            }, (duration / 10) * 60 * 1000);
         })
     </script>
     <script>
@@ -790,5 +945,68 @@
                 }
             })
         })
+    </script>
+
+    <script>
+        const tabBtns = document.querySelectorAll('[data-tab-id]');
+        // Lắng nghe sự kiện click cho các nút tab đẻ mở tab có id bằng data-tab-id
+        tabBtns.forEach((tabBtn) =>
+            tabBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                const tabId = this.getAttribute('data-tab-id');
+                // Ẩn tất cả các tab
+                document.querySelectorAll('[tab-id]').forEach((tab) => {
+                    if (tab.getAttribute('tab-id') === tabId) {
+                        tab.classList.remove('hidden');
+                    } else {
+                        tab.classList.add('hidden');
+                    }
+                });
+                // Đổi màu nút tab đã chọn
+                tabBtns.forEach((tabBtn) => {
+                    tabBtn.classList.remove('bg-primary-600', 'text-white');
+                    tabBtn.classList.add('text-primary-600');
+                    if (tabBtn.getAttribute('data-tab-id') === tabId) {
+                        tabBtn.classList.remove('bg-transparent');
+                        tabBtn.classList.add('bg-primary-600', 'text-white');
+                    }
+                })
+
+            }));
+    </script>
+
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            if (n > slides.length) {
+                slideIndex = 1
+            }
+            if (n < 1) {
+                slideIndex = slides.length
+            }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
     </script>
 @endpush

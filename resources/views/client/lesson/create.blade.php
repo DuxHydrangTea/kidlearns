@@ -174,7 +174,7 @@
                         </select>
                     </div>
 
-                    <input type="hidden" name="lesson_type_id" value="{{ request('lessonTypeId') }}">
+                    <input type="hidden" name="lesson_type_id" value="{{ request('lesson_type_id') }}">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -341,38 +341,82 @@
 
         <div class="tab-content" id="video-upload">
             <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Video bài giảng</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Bài giảng</h2>
+                <div class="p-5 m-5 border-2 border-dashed relative border-primary-500 mb-[50px]">
+                    <p class="absolute top-0 translate-y-[-50%] left-[20px] bg-white px-2 mb-5 font-bold text-primary-500">File zip cho bài giảng</p>
+                    <input type="text" name="zip_title"
+                        class="w-full px-4 py-3 mb-4 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Tiêu đề bài giảng">
+                    <div class="drag-drop-zone rounded-xl p-8 text-center cursor-pointer">
+                        <div class="mb-4">
+                            <i class="fas fa-cloud-upload-alt text-5xl text-gray-400"></i>
+                        </div>
+                        <h3 id="heading-video" class="text-xl font-bold text-gray-700 mb-2">Nhập file zip vào đây</h3>
+                        <p class="text-gray-500 mb-4">hoặc</p>
+                        <label
+                            class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-bold rounded-xl cursor-pointer hover:bg-primary-700">
+                            <i class="fas fa-upload mr-2"></i>
+                            Chọn file zip từ máy tính
+                            <input type="file" id="video-upload" name="zip_path" class="hidden"
+                                accept=".zip">
+                        </label>
+                        <p class="text-sm text-gray-500 mt-4">Hỗ trợ: <span class="font-bold text-red-500">Zip</span>
+                            </p>
+                    </div>
+                
+                </div>
 
-                <div class="space-y-6" required-value>
-                    <label class="flex gap-2 w-fit items-center  px-4 py-3 rounded-xl border-2 border-gray-200">
-                        <input type="radio" name="video_type" value="zip" id="" checked>
-                        <span>File Zip</span>
-                    </label>
-                    <label class="flex gap-2 w-fit items-center  px-4 py-3 rounded-xl border-2 border-gray-200">
-                        <input type="radio" name="video_type" value="mp4" id="">
-                        <span>File Mp4</span>
-                    </label>
+                <div class="p-5 m-5 border-2 border-dashed relative border-green-500 mb-[50px]">
+                    <p class="absolute top-0 translate-y-[-50%] left-[20px] bg-white px-2 mb-5 font-bold text-green-500">File video cho bài giảng</p>
                     <input type="text" name="video_title"
-                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        class="w-full px-4 py-3 mb-4 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
                         placeholder="Tiêu đề video">
                     <div class="drag-drop-zone rounded-xl p-8 text-center cursor-pointer">
                         <div class="mb-4">
                             <i class="fas fa-cloud-upload-alt text-5xl text-gray-400"></i>
                         </div>
-                        <h3 id="heading-video" class="text-xl font-bold text-gray-700 mb-2">Kéo và thả video vào đây</h3>
+                        <h3 id="heading-video" class="text-xl font-bold text-gray-700 mb-2">Nhập file video vào đây</h3>
                         <p class="text-gray-500 mb-4">hoặc</p>
                         <label
-                            class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-bold rounded-xl cursor-pointer hover:bg-primary-700">
+                            class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-bold rounded-xl cursor-pointer hover:bg-green-700">
                             <i class="fas fa-upload mr-2"></i>
                             Chọn video từ máy tính
                             <input type="file" id="video-upload" name="video_path" class="hidden"
-                                accept=".zip, application/zip, .mp4,video/mp4">
+                                accept=".mp4,video/mp4">
                         </label>
-                        <p class="text-sm text-gray-500 mt-4">Hỗ trợ: <span class="font-bold text-red-500">MP4, Zip</span>
-                            nếu là video slider</p>
+                        <p class="text-sm text-gray-500 mt-4">Hỗ trợ: <span class="font-bold text-red-500">MP4</span>
+                            </p>
                     </div>
-
+                
                 </div>
+
+
+                <div class="p-5 m-5 border-2 border-dashed relative border-purple-500 mb-[50px]">
+                    <p class="absolute top-0 translate-y-[-50%] left-[20px] bg-white px-2 mb-5 font-bold text-purple-500">File ảnh cho bài giảng</p>
+                    <input type="text" name="images_title"
+                        class="w-full px-4 py-3 mb-4 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none text-lg"
+                        placeholder="Tiêu đề ảnh">
+                    <div class="drag-drop-zone rounded-xl p-8 text-center cursor-pointer">
+                        <div class="mb-4">
+                            <i class="fas fa-cloud-upload-alt text-5xl text-gray-400"></i>
+                        </div>
+                        <h3 id="heading-video" class="text-xl font-bold text-gray-700 mb-2">Nhập ảnh vào đây</h3>
+                        <p class="text-gray-500 mb-4">hoặc</p>
+                        <label
+                            class="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-bold rounded-xl cursor-pointer hover:bg-purple-700">
+                            <i class="fas fa-upload mr-2"></i>
+                            Chọn ảnh từ máy tính
+                            <input type="file" id="video-upload" name="image_paths[]" multiple class="hidden"
+                                accept="image/*">
+                        </label>
+                        <p class="text-sm text-gray-500 mt-4">Hỗ trợ: <span class="font-bold text-red-500">JPG, PNG, JPEG, GIF</span>
+                            </p>
+                    </div>
+                
+                </div>
+
+
+            
 
                 <div class="flex justify-between mt-8">
                     <button type="button"
@@ -583,8 +627,8 @@
                                     <div class="flex justify-between items-center mb-4">
                                         <h4 class="text-lg font-bold text-gray-900">Câu hỏi {{ $i }}</h4>
                                         <button type="button"
-                                            class="show-hide px-5 py-2 bg-amber-600 rounded-lg text-white border-1">
-                                            Show/Hide
+                                            class="show-hide transition-all px-5 py-2 bg-amber-600 rounded-lg text-white border-1">
+                                            <svg class="transition-all" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M13.06 16.06a1.5 1.5 0 0 1-2.12 0l-5.658-5.656a1.5 1.5 0 1 1 2.122-2.121L12 12.879l4.596-4.596a1.5 1.5 0 0 1 2.122 2.12l-5.657 5.658Z"/></g></svg>
                                         </button>
                                     </div>
 
@@ -1015,6 +1059,8 @@
                         btn.closest('.question-container').querySelectorAll('.question-content')
                             .forEach(e => {
                                 e.classList.toggle('hidden');
+                                btn.querySelector('svg').classList.toggle('rotate-180');
+                       
                             })
                     });
                 });

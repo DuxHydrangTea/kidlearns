@@ -29,8 +29,8 @@ class LessonController extends Controller
         $classes = ClassModel::all();
         $subjects = Subject::all();
         $lessonTypes = LessonType::all();
-        if ($request->has('lessonTypeId')) {
-            $lessonType = LessonType::find($request->lessonTypeId);
+        if ($request->has('lesson_type_id')) {
+            $lessonType = LessonType::find($request->lesson_type_id);
         } else {
             $lessonType = null;
         }
@@ -41,23 +41,8 @@ class LessonController extends Controller
     {
         // dd($request->all());
         // ===== LESSION
-        try {
-            DB::beginTransaction();
 
-            if ($request->hasFile('video_path')) {
-                $request->video_type = $request->video_type ?? "mp4";
-
-                if ($request->video_type == "zip") {
-                    $uploadPath = $this->upload_public($request->file('video_path'));
-                    $extractPath = $this->handleZipVideo($uploadPath);
-                } else {
-                    $extractPath = 'storage' . $this->upload_public($request->file('video_path'));
-                }
-            }
-            if (!is_null($request->lesson_type_id))
-                $max_order = Lesson::where('lesson_type_id', $request->lesson_type_id)->max('order') + 1 ?? 0;
-
-            $attributesLession = [
+        $attributesLession = [
                 'title' => $request->title,
                 'description' => $request->description,
                 'user_id' => auth()->user()->id,
@@ -69,10 +54,40 @@ class LessonController extends Controller
                 'tags' => $request->tags,
                 'objectives' => $request->objectives,
                 'content' => $request->content,
-                'video_path' => $extractPath ?? "",
                 'video_title' => $request->video_title,
-                'video_type' => $request->video_type,
+                'zip_title' => $request->zip_title,
+                'images_title' => $request->images_title,
             ];
+
+
+        try {
+            DB::beginTransaction();
+
+            if ($request->hasFile('video_path')) {
+                $videoPath = 'storage' . $this->upload_public($request->file('video_path'));
+                $attributesLession['video_path'] = $videoPath;
+            }
+
+            if($request->hasFile('zip_path')){
+                $zipPath = $this->upload_public($request->file('zip_path'));
+                $extractZipPath = $this->handleZipVideo($zipPath);
+                $attributesLession['zip_path'] = $extractZipPath;
+            }
+
+            if($imageFiles = $request->file('image_paths')){
+                $imagePaths = [];
+                foreach ($imageFiles as $imageFile) {
+                    $imagePaths[] = 'storage' . $this->upload_public($imageFile);
+                }
+                $uploadImagesPath = json_encode($imagePaths);
+                $attributesLession['image_paths'] = $uploadImagesPath;
+            }
+
+
+            if (!is_null($request->lesson_type_id))
+                $max_order = Lesson::where('lesson_type_id', $request->lesson_type_id)->max('order') + 1 ?? 0;
+
+            
 
             // documents attribute
             $documents = [];
