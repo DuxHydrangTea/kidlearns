@@ -121,7 +121,9 @@
                         </div>
                         <div class="relative">
                             <img src="{{$quiz->thumbnail}}"
-                                alt="Math Quiz" class="w-full h-48 object-cover" />
+                                alt="Math Quiz" class="w-full h-48 object-cover"
+                                onerror="this.onerror=null; this.src='{{ asset('assets/images/failed.gif') }}';"
+                                />
                             <div
                                 class="absolute top-4 right-4 bg-primary-500 text-white text-sm font-bold px-3 py-1 rounded-full">
                                 <i class="fas fa-gamepad mr-1"></i> Quiz
@@ -173,4 +175,17 @@
         } )
     })
 </script>
+
+<script>
+        // Lấy đường dẫn ảnh lỗi từ blade
+        const defaultImg = "{{ asset('assets/images/failed.gif') }}";
+        document.addEventListener("DOMContentLoaded", function() {
+            const imgs = document.querySelectorAll("img");
+            imgs.forEach(img => {
+                img.addEventListener("error", function() {
+                    this.setAttribute('src',defaultImg);
+                });
+            });
+        });
+    </script>
 @endpush

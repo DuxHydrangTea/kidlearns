@@ -70,7 +70,7 @@ class QuizController extends Controller
                 $quizQuestion = QuizQuestion::create([
                     'quiz_id' => $quiz->id,
                     'title' => $question['title'],
-                    'thumbnail' => $question['thumbnail'],
+                    // 'thumbnail' => $question['thumbnail'],
                     'order' => $index,
                     'answers' => json_encode($question['question']),
                     'correct_answer' => $question['correct'],

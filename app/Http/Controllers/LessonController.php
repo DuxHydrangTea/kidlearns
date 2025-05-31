@@ -118,7 +118,7 @@ class LessonController extends Controller
 
             }
             DB::commit();
-            return redirect()->route('home.index');
+            return redirect()->route('home.index')->with('message', 'Tạo bài học thành công');
 
         } catch (\Throwable $th) {
             DB::rollback();
