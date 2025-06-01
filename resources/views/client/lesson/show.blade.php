@@ -253,13 +253,12 @@
                 <div class="flex mb-5 border-b-8 border-primary-600">
                     @if ($lesson->zip_path)
                         <button data-tab-id="zip-container"
-                            class="hover:bg-primary-600 hover:text-white bg-primary-600 text-white px-5 py-2  ">Video</button>
+                            class="hover:bg-primary-600 hover:text-white bg-primary-600 text-white px-5 py-2  ">Bài giảng Slide</button>
                     @endif
 
                     @if ($lesson->video_path)
                         <button data-tab-id="video-container"
-                            class="hover:bg-primary-600 hover:text-white text-primary-600 bg-transparent px-5 py-2">Bài
-                            giảng</button>
+                            class="hover:bg-primary-600 hover:text-white text-primary-600 bg-transparent px-5 py-2">Video</button>
                     @endif
 
                     @if ($lesson->image_paths)

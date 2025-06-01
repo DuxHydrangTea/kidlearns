@@ -544,7 +544,7 @@
 
 
                 </div>
-                <div class="flex justify-end">
+                <div class="flex justify-end my-5">
                     <button type="button" id="add-a-document-btn"
                         class="next-tab px-6 py-3 bg-purple-600 text-white font-bold rounded-xl hover:bg-primary-700"> Thêm
                         tài liệu</button>
