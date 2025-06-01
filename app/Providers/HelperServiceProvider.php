@@ -23,7 +23,7 @@ class HelperServiceProvider extends ServiceProvider
     {
         //
         Blade::directive('role', function ($expression) {
-            return "<?php if(auth()->user() && auth()->user()->role == $expression): ?>";
+            return "<?php if(auth()->user() && auth()->user()->role >= $expression): ?>";
         });
 
         // Directive đóng

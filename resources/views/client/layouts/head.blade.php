@@ -18,5 +18,6 @@
             text-shadow: -1px -1px 0 #dd2f6f, 1px -1px 0 #dd2f6f, -1px 1px 0 #dd2f6f, 1px 1px 0 #dd2f6f;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     @stack('styles')
 </head>
