@@ -135,6 +135,8 @@ Route::middleware('auth_member')->group(
         Route::resource('document', DocumentController::class);
 
         Route::get('/file-preview', [FilePreviewController::class, 'filePreview'])->name('file_preview');
+        Route::get('/file-preview-ember', [FilePreviewController::class, 'filePreviewEmber'])->name('file_preview_ember');
+
 
         Route::group([
             'prefix' => '/class',

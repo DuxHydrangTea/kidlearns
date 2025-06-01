@@ -90,7 +90,7 @@
         })
     </script>
 
-    <script>
+    {{-- <script>
         // Lấy đường dẫn ảnh lỗi từ blade
         const defaultImg = "{{ asset('assets/images/failed.gif') }}";
         document.addEventListener("DOMContentLoaded", function() {
@@ -101,7 +101,7 @@
                 });
             });
         });
-    </script>
+    </script> --}}
     @stack('scripts')
 </body>
 

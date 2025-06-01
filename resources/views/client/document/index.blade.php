@@ -67,20 +67,10 @@
                 </label>
 
                 <label class="border-2 border-gray-200 rounded p-2 relative hover:border-[#dd326c]">
-                    <p class="font-semibold text-[#dd326c] absolute top-0 left-[10px] translate-y-[-50%] bg-white px-1"> Đối tượng </p>
-                    <select name="access" id="" class="outline-0">
-                        <option value="">Tất cả</option>
-                        <option value="public" {{request('access') == "public" ? "selected" : ""}}>Công khai</option>
-                        <option value="private" {{request('access') == "private" ? "selected" : ""}}>Riêng tư</option>
-                        <option value="restricted" {{request('access') == "restricted" ? "selected" : ""}}>Giới hạn (chỉ học sinh của tôi)</option>
-                    </select>
-                </label>
-
-                <label class="border-2 border-gray-200 rounded p-2 relative hover:border-[#dd326c]">
-                    <p class="font-semibold text-[#dd326c] absolute top-0 left-[10px] translate-y-[-50%] bg-white px-1"> Đối tượng </p>
+                    <p class="font-semibold text-[#dd326c] absolute top-0 left-[10px] translate-y-[-50%] bg-white px-1"> Sắp xếp </p>
                     <select name="sort" id="" class="outline-0">
-                        <option value="desc" {{request()->sort == "desc" ? "selected" : ""}} >Cũ nhất</option>
-                        <option value="asc" {{request()->sort == "asc" ? "selected" : ""}} >Mới nhất</option>
+                        <option value="asc" {{request()->sort == "asc" ? "selected" : ""}} >Cũ nhất</option>
+                        <option value="desc" {{request()->sort == "desc" ? "selected" : ""}} >Mới nhất</option>
                     </select>
                 </label>
 
@@ -109,7 +99,9 @@
                     <div class="p-5 documents-container">
                         <div class="flex items-center mb-3">
                             <div class=" bg-blue-100 rounded-lg flex items-center justify-center mr-3 p-1">
-                                <img src="{{asset($document->thumbnail)}}" class="w-[80px] h-[80px] object-cover rounded" alt="">
+                                <img src="{{asset($document->thumbnail)}}" class="w-[80px] h-[80px] object-cover rounded" alt=""
+                                onerror="this.onerror=null; this.src='{{ asset('assets/images/failed.gif') }}';"
+                                >
                             </div>
                             <div>
                                 <h3 class="font-bold text-lg">{{ $document->title }} - <span class="text-sm  text-gray-500 italic">Đăng tải lúc {{$document->created_at}}</span></h3>
@@ -187,12 +179,15 @@
                                                 </svg></button>
                                         </form>
                                         @if (pathinfo($file->file, PATHINFO_EXTENSION) != 'zip')
-                                            <a href="{{ route('file_preview', [
+                                            <a
+                                            data-tippy-content="Xem trước file này"
+                                            href="{{ route('file_preview', [
                                                 'fileName' => $file->file,
                                             ]) }}"
                                                 target="_blank"
                                                 class="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-sm">Đọc</a>
                                         @endif
+                                        
                                     </div>
                                 </div>
                             @endforeach
