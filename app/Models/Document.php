@@ -37,6 +37,11 @@ class Document extends Model
         return explode(',', $this->attributes['tags']);
     }
 
+    public function documentFiles()
+    {
+        return $this->hasMany(DocumentFile::class);
+    }
+
     public static function getAllTypes () {
         return [
           'lesson' => 'Bài giảng',

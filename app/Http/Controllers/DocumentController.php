@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\FileHandle;
 use App\Models\ClassModel;
 use App\Models\Document;
+use App\Models\DocumentFile;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 
@@ -57,6 +58,7 @@ class DocumentController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         try {
             $attributes = $request->except('_token');
 
@@ -65,13 +67,8 @@ class DocumentController extends Controller
             }
 
             $documenFiles = [];
-            foreach ($attributes['document_file'] as $index => $file) {
-                $documenFiles[] = [
-                    'name' => $attributes['document_name'][$index] ?? "",
-                    'file' => $this->upload_public($file),
-                ];
-            }
-            $attributes['document_file'] = json_encode($documenFiles);
+            
+            // $attributes['document_file'] = json_encode($documenFiles);
 
             $dmt = Document::create([
                 'title'       => $attributes['title'] ?? '',
@@ -81,14 +78,57 @@ class DocumentController extends Controller
                 'type'        => $attributes['type'] ?? '',
                 'tags'        => $attributes['tags'] ?? '',
                 'thumbnail'   => $attributes['thumbnail'] ?? '',
-                'documents'   => $attributes['document_file'] ?? '',
+                // 'documents'   => $attributes['document_file'] ?? '',
                 'access'      => $attributes['access'] ?? '',
                 'description' => $attributes['description']?? '',
             ]);
 
-            return redirect()->route('document.index')->with('success', 'Document created successfully.');
+            foreach ($attributes['document_file'] as $index => $file) {
+                // $documenFiles[] = [
+                //     'name' => $attributes['document_name'][$index] ?? "",
+                //     'file' => $this->upload_public($file),
+                // ];
+                DocumentFile::create([
+                    'document_id' => $dmt->id,
+                    'name' => $attributes['document_name'][$index] ?? "",
+                    'file_path' =>  $this->upload_public($file),
+                ]);
+            }
+
+            return redirect()->route('document.index')->with('message', 'Đăng tải tài liệu thành công!');
         } catch (\Throwable $th) {
             dd($th);
         }
+    }
+
+    public function destroy($id){
+        $document = Document::findOrFail($id);
+        $document->documentFiles()->each(function ($file) {
+            $file->delete();
+        });
+        $document->delete();
+
+        return redirect()->route('document.index')->with('message', 'Đăng tải file thành công!');
+    }
+
+    public function deleteFile($id){
+        $document = DocumentFile::findOrFail($id);
+        $document->delete();
+        return redirect()->route('document.index')->with('message', 'Xoá file thành công!');
+    }
+
+    public function addFile(Request $request){
+        $files = $request->new_files;
+        if (empty($files)) {
+            return redirect()->back()->with('error', 'Không có file nào được chọn!');
+        }
+        foreach ($files as $index => $file) {
+            DocumentFile::create([
+                'document_id' => $request->document_id,
+                'name' => $request->name[$index] ?? "",
+                'file_path' => $this->upload_public($file),
+            ]);
+        }
+        return redirect()->route('document.index')->with('message', 'Thêm các file thành công!');
     }
 }
