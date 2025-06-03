@@ -12,6 +12,14 @@ class Lesson extends Model
     protected $guarded = [];
     
 
+    function getFileColumns (){
+        return [
+            $this->video_path,
+            $this->zip_path,
+            $this->thumbnail,
+        ];
+    }
+
 
     // Relationships
     public function user()

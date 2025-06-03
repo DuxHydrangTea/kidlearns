@@ -8,7 +8,7 @@ use App\Models\Document;
 use App\Models\DocumentFile;
 use App\Models\Subject;
 use Illuminate\Http\Request;
-
+use Storage;
 class DocumentController extends Controller
 {
     use FileHandle;
@@ -114,7 +114,9 @@ class DocumentController extends Controller
     public function deleteFile($id){
         $document = DocumentFile::findOrFail($id);
         $document->delete();
-        return redirect()->route('document.index')->with('message', 'Xoá file thành công!');
+        
+
+        return redirect()->route('document.index')->with('message', 'Xoá file '.$document->file_path.' thành công!');
     }
 
     public function addFile(Request $request){

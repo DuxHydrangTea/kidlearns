@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\DocumentFile;
 use Illuminate\Support\ServiceProvider;
 use Carbon\Carbon;
 
@@ -24,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('vi');
         //
+        DocumentFile::observe(\App\Observers\DocumentFileObserver::class);
     }
 }

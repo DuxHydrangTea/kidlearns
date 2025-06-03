@@ -210,7 +210,6 @@
                                         <a
                                             data-tippy-content="Xoá file này"
                                             href="{{route('document.delete_file', $file->id)}}"
-                                                target="_blank"
                                                 class="px-3 py-1 bg-red-50 text-red-600 rounded-lg text-sm">Xoá</a>
 
                                         @if (pathinfo($file->file_path, PATHINFO_EXTENSION) != 'zip')
