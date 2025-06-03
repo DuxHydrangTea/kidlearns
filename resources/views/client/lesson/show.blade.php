@@ -969,6 +969,8 @@
                 })
 
             }));
+        // Mặc định mở tab đầu tiên
+        document.querySelector('[data-tab-id]').click();
     </script>
 
     <script>

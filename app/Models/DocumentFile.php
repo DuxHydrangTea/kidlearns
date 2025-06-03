@@ -14,6 +14,12 @@ class DocumentFile extends Model
         'document_id',
     ];
 
+    function getFileColumns (){
+        return [
+            $this->file_path,
+        ];
+    }
+
     public function document()
     {
         return $this->belongsTo(Document::class);
