@@ -622,7 +622,7 @@
 
 
                             <!-- Question  -->
-                            @for ($i = 1; $i <= 10; $i++)
+                            @for ($i = 1; $i <= 5; $i++)
                                 <div class="border-2 border-gray-100 rounded-xl p-4 mb-4 question-container">
                                     <div class="flex justify-between items-center mb-4">
                                         <h4 class="text-lg font-bold text-gray-900">Câu hỏi {{ $i }}</h4>
