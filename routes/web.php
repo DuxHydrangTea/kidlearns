@@ -133,6 +133,8 @@ Route::middleware('auth_member')->group(
         );
 
         Route::resource('document', DocumentController::class);
+        Route::get('document-file/{id}', [DocumentController::class, 'deleteFile'])->name('document.delete_file');
+        Route::post('document-file/add', [DocumentController::class, 'addFile'])->name('document.add_file');
 
         Route::get('/file-preview', [FilePreviewController::class, 'filePreview'])->name('file_preview');
         Route::get('/file-preview-ember', [FilePreviewController::class, 'filePreviewEmber'])->name('file_preview_ember');

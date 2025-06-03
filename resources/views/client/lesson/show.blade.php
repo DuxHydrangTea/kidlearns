@@ -286,7 +286,7 @@
                     @if ($lesson->zip_path)
                         <div tab-id="zip-container" id="zip-container">
                             <iframe src="{{ asset($lesson->zip_path) }}/res/index.html" style="zoom: 1.5"
-                                class="w-full h-auto"></iframe>
+                                class="w-full aspect-square"></iframe>
                         </div>
                     @endif
                     @if ($lesson->video_path)
@@ -430,7 +430,7 @@
                                         <i class="fas fa-star-half-alt text-green-500 text-2xl"></i>
                                     </div>
                                     <h4 class="text-lg font-bold text-green-800 mb-1">Dễ</h4>
-                                    <p class="text-sm text-green-600">10 câu hỏi đơn giản</p>
+                                    <p class="text-sm text-green-600">Các câu hỏi đơn giản</p>
                                 </label>
                             </a>
 
@@ -449,7 +449,7 @@
                                         <i class="fas fa-star-half-alt text-yellow-500 text-2xl"></i>
                                     </div>
                                     <h4 class="text-lg font-bold text-yellow-800 mb-1">Trung bình</h4>
-                                    <p class="text-sm text-yellow-600">10 câu hỏi vừa phải</p>
+                                    <p class="text-sm text-yellow-600">Các câu hỏi vừa phải</p>
                                 </label>
                             </a>
 
@@ -468,7 +468,7 @@
                                         <i class="fas fa-star-half-alt text-red-500 text-2xl"></i>
                                     </div>
                                     <h4 class="text-lg font-bold text-red-800 mb-1">Khó</h4>
-                                    <p class="text-sm text-red-600">10 câu hỏi thách thức</p>
+                                    <p class="text-sm text-red-600">Các câu hỏi thách thức</p>
                                 </label>
                             </a>
                         </div>
@@ -626,8 +626,7 @@
                                                 <i class="fas fa-play text-white"></i>
                                             </div>
                                             <div class="flex-1">
-                                                <h4 class="font-bold text-primary-900">Bài {{ $index + 1 }}:
-                                                    {{ $les->title }}</h4>
+                                                <h4 class="font-bold text-primary-900"> {{ $les->title }}</h4>
                                                 <p class="text-sm text-primary-700">20 phút • Đang học - Hoàn thành lần
                                                     cuối: {{ $les->myLessonProgress?->progress ?? 0 }}%</p>
                                             </div>
@@ -644,8 +643,7 @@
                                                     <i class="fas fa-check text-primary-600"></i>
                                                 </div>
                                                 <div class="flex-1">
-                                                    <h4 class="font-bold text-gray-900">Bài {{ $index + 1 }}:
-                                                        {{ $les->title }}</h4>
+                                                    <h4 class="font-bold text-gray-900"> {{ $les->title }}</h4>
                                                     <p class="text-sm text-gray-600">{{ $les->duration }} phút • Hoàn
                                                         thành - Hoàn thành lần cuối:
                                                         {{ $les->myLessonProgress?->progress ?? 0 }}%</p>
@@ -667,8 +665,7 @@
                                                     </svg>
                                                 </div>
                                                 <div class="flex-1">
-                                                    <h4 class="font-bold text-gray-700">Bài {{ $index + 1 }}:
-                                                        {{ $les->title }}</h4>
+                                                    <h4 class="font-bold text-gray-700"> {{ $les->title }}</h4>
                                                     <p class="text-sm text-gray-500">{{ $les->duration }} phút • Chưa đủ
                                                         tiến trình</p>
                                                 </div>
