@@ -43,8 +43,8 @@
                 <a href="/" class="flex-shrink-0 flex items-center">
                     <img src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png" alt="Logo"
                         class="w-12 h-12 mr-2" />
-                    <span class="text-primary-600 text-3xl font-bold">Kids<span
-                            class="text-secondary-500">Learn</span></span>
+                    <span class="text-primary-600 text-3xl font-bold">Tài Liệu<span
+                            class="text-secondary-500">Tiểu Học</span></span>
                 </a>
                 <nav class="hidden md:ml-8 md:flex md:space-x-8">
                     <a href="{{ route('home.index') }}"

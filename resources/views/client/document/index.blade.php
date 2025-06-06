@@ -258,34 +258,42 @@
 
                                 <div
                                     class="add-slide-container hidden fixed top-[50px] w-[800px] left-1/2 translate-x-[-50%] z-50 bg-white rounded-xl shadow-lg border border-gray-200 p-5">
+                                    <button class="close-add-slide-container py-2 px-5 hover:bg-gray-900 hover:text-white bg-gray-400 rounded-xl">Thoát</button>
                                     <h3 class="text-lg font-bold mb-4 text-center text-blue-700">Danh sách preview slide
                                     </h3>
+                                    <div class="border-2 border-gray-300 roudned-xl h-[200px] p-2 overflow-x-auto flex gap-2">
+                                        @foreach ($document->documentSlides as $file )
+                                        <div class="relative aspect-video">
+                                            <a href="{{route('document_slide.delete_file', [
+                                                'file_id' => $file->id,
+                                            ])}}" class="block absolute px-3 py-1 m-2 border-2 border-white shadow-2xl  bg-red-500 text-white rounded-xl">Xoá</a>
+                                            <img src="{{asset($file->image_path)}}" class="h-full w-full object-cover" alt="">
+                                        </div>
+                                        @endforeach
+                                    </div>
                                     <div class="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
                                         <!-- Danh sách ảnh preview, mỗi ảnh là 1 item -->
-                                        <div
-                                            class="flex items-center gap-3 border rounded-lg p-2 hover:bg-blue-50 transition preview-temp">
-                                            <img src="${evt.target.result}" alt="Preview Slide"
-                                                class="w-20 h-14 object-cover rounded shadow border border-gray-200 bg-gray-100">
-                                            <div class="flex-1">
-                                                <p class="text-sm text-gray-700 truncate">${file.name}</p>
-                                            </div>
-                                        </div>
+                                       
                                         <!-- ... Thêm nhiều ảnh khác nếu cần ... -->
                                     </div>
-                                    <div class="mt-5">
+                                    <form class="mt-5" method="POST" action="{{route('document_slide.upload_files')}}" enctype="multipart/form-data">
+                                        @csrf
                                         <label class="block">
                                             <span class="text-sm font-medium text-gray-700">Thêm ảnh preview mới</span>
-                                            <input type="file" accept="image/*" multiple
+                                            <input type="file" name="images[]" accept="image/*" multiple
                                                 class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                                         </label>
+
+                                        <input type="hidden" name="document_id" value="{{$document->id}}">
                                         <button
+                                            type="submit"
                                             class="mt-3 w-full bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition font-semibold">Tải
                                             lên</button>
-                                    </div>
+                                    </form>
                                 </div>
 
                                 <button
-                                    class="add-preview-slide px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-sm border-2 border-amber-600">Thêm
+                                    class="add-preview-slide px-3 py-1 bg-violet-50 text-violet-600 rounded-lg text-sm border-2 border-violet-600">Thêm
                                     preview slide</button>
 
                                 <button
@@ -302,28 +310,14 @@
                                     <div class="flex-1">
                                         <div id="images-container">
                                             <div class="slideshow-container">
-                                                <div class="mySlides fade">
-                                                    <div class="numbertext"></div>
-                                                    <img src="{{ asset('assets/images/failed.gif') }}"
-                                                        style="width:100%">
-                                                    <div class="text">abc</div>
-                                                </div>
-                                                <div class="mySlides fade">
-                                                    <div class="numbertext"></div>
-                                                    <img src="{{ asset('assets/images/panda.gif') }}" style="width:100%">
-                                                    <div class="text">abc</div>
-                                                </div>
-                                                <div class="mySlides fade">
-                                                    <div class="numbertext"></div>
-                                                    <img src="{{ asset('assets/images/failed.gif') }}"
-                                                        style="width:100%">
-                                                    <div class="text">abc</div>
-                                                </div>
-                                                <div class="mySlides fade">
-                                                    <div class="numbertext"></div>
-                                                    <img src="{{ asset('assets/images/panda.gif') }}" style="width:100%">
-                                                    <div class="text">abc</div>
-                                                </div>
+                                                @foreach ($document->documentSlides as $index => $slide )
+                                                    <div class="mySlides fade">
+                                                        <div class="numbertext"></div>
+                                                        <img src="{{ asset($slide->image_path) }}"
+                                                            style="width:100%">
+                                                        <div class="text">{{$index + 1}}/{{count($document->documentSlides)}}</div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                             <br>
                                         </div>
@@ -347,10 +341,12 @@
                                         </button>
 
                                         <div class="flex flex-1 rounded overflow-hidden">
-                                            <div role="button" class="dot flex-1 h-[20px] bg-amber-400"></div>
+                                            @foreach ($document->documentSlides as $index => $slide )
+                                                <div role="button" class="dot flex-1 h-[20px] bg-gray-400"></div>
+                                            @endforeach
+                                            {{-- <div role="button" class="dot flex-1 h-[20px]  bg-gray-400"></div>
                                             <div role="button" class="dot flex-1 h-[20px]  bg-gray-400"></div>
-                                            <div role="button" class="dot flex-1 h-[20px]  bg-gray-400"></div>
-                                            <div role="button" class="dot flex-1 h-[20px] bg-gray-400"></div>
+                                            <div role="button" class="dot flex-1 h-[20px] bg-gray-400"></div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -672,5 +668,13 @@
                 });
             });
         });
+    </script>
+    <script>
+        const outAddSlideBtns = document.querySelectorAll('.close-add-slide-container');
+            outAddSlideBtns.forEach(btn => {
+                btn.addEventListener('click', e => {
+                    btn.closest('.add-slide-container').classList.toggle('hidden')
+                })
+            })
     </script>
 @endpush

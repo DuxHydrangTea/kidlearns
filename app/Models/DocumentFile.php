@@ -24,4 +24,8 @@ class DocumentFile extends Model
     {
         return $this->belongsTo(Document::class);
     }
+
+    public function documents() {
+        return $this->belongsTo(Document::class);
+    }
 }

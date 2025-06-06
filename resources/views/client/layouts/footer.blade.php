@@ -6,8 +6,8 @@
                 <div class="flex items-center mb-4">
                     <img src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png" alt="Logo"
                         class="w-10 h-10 mr-2" />
-                    <span class="text-primary-400 text-2xl font-bold">Kids<span
-                            class="text-secondary-400">Learn</span></span>
+                    <span class="text-primary-400 text-2xl font-bold">Tài Liệu<span
+                            class="text-secondary-400">Tiểu Học</span></span>
                 </div>
                 <p class="text-gray-400 mb-4">
                     Nền tảng học tập trực tuyến hàng đầu dành cho học sinh tiểu học,
@@ -61,15 +61,15 @@
                 <ul class="space-y-2">
                     <li class="flex items-start">
                         <i class="fas fa-map-marker-alt mt-1 mr-2 text-gray-400"></i>
-                        <span class="text-gray-400">123 Đường Giáo Dục, Quận 1, TP.HCM</span>
+                        <span class="text-gray-400">182, đường Lê Duẩn, thành phố Vinh, tỉnh Nghệ An</span>
                     </li>
                     <li class="flex items-start">
                         <i class="fas fa-phone mt-1 mr-2 text-gray-400"></i>
-                        <span class="text-gray-400">+84 123 456 789</span>
+                        <span class="text-gray-400" >0388.068.174</span>
                     </li>
                     <li class="flex items-start">
                         <i class="fas fa-envelope mt-1 mr-2 text-gray-400"></i>
-                        <span class="text-gray-400">info@kidslearn.vn</span>
+                        <span class="text-gray-400">nhom10k63.tnxh.vinhuni@gmail.com</span>
                     </li>
                 </ul>
             </div>
@@ -77,7 +77,7 @@
 
         <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p class="text-gray-400 text-sm mb-4 md:mb-0">
-                © 2025 KidsLearn. Bản quyền thuộc về KidsLearn.
+                © 2025 Tieulieutieuhoc.edu.vn - Bản quyền thuộc về Tieulieutieuhoc.edu.vn
             </p>
             <div class="flex space-x-4">
                 <a href="#" class="text-gray-400 hover:text-white text-sm">Điều khoản sử dụng</a>

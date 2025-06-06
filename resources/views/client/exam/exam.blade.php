@@ -16,7 +16,7 @@
         <header class="container mx-auto px-4 mb-8 text-center">
             <div class="flex items-center justify-center mb-4">
                 <img src="https://cdn-icons-png.flaticon.com/512/2172/2172858.png" alt="Logo" class="h-16 mr-3">
-                <h1 class="text-4xl font-bold text-indigo-600">Edu<span class="text-yellow-400">Kids</span></h1>
+                <h1 class="text-4xl font-bold text-indigo-600">Tài Liệu<span class="text-yellow-400">Tiểu học</span></h1>
             </div>
             <div class="bg-white rounded-xl p-4 inline-block">
                 <div class="flex items-center">

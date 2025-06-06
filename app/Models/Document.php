@@ -42,6 +42,10 @@ class Document extends Model
         return $this->hasMany(DocumentFile::class);
     }
 
+    public function documentSlides(){
+        return $this->hasMany(DocumentSlide::class);
+    }
+
     public static function getAllTypes () {
         return [
           'lesson' => 'Bài giảng',
