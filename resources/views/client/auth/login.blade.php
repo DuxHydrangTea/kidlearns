@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng nhập - KidsLearn</title>
+    <title>Đăng nhập - Tài liệu tiểu học</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -104,7 +104,7 @@
                 alt="Logo"
                 class="w-12 h-12 mr-3"
               />
-              <h1 class="text-3xl font-bold mb-2">KidsLearn</h1>
+              <h1 class="text-3xl font-bold mb-2">Tài Liệu Tiểu Học</h1>
             </div>
             <p class="text-primary-100 mb-8">
               Học vui - Học dễ - Học thông minh!
@@ -158,7 +158,7 @@
 
           <div class="mt-auto">
             <p class="text-sm text-primary-100">
-              © 2025 KidsLearn. Bản quyền thuộc về KidsLearn.
+              © 2025 Tailieutieuhoc.edu.vn - Bản quyền thuộc về Tailieutieuhoc.edu.vn
             </p>
           </div>
         </div>

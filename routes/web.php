@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\DocumentSlideController;
 use App\Http\Controllers\FilePreviewController;
 use App\Http\Controllers\admin\ClassController;
 use App\Http\Controllers\admin\CourseController;
@@ -153,6 +154,15 @@ Route::middleware('auth_member')->group(
         ], function () {
             Route::get('/my-history', 'myHistory')->name('history.my_history');
             Route::get('/other-history', 'otherHistory')->name('history.other_history');
+        });
+
+        Route::group([
+            'controller' => DocumentSlideController::class,
+            'prefix' => 'document-slides',
+            'as' => 'document_slide.',
+        ],function() {
+            Route::post('uploadFiles', 'uploadFiles')->name('upload_files');
+            Route::get('deleteFile', 'deleteFile')->name('delete_file');
         });
         
     }

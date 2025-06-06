@@ -12,7 +12,7 @@
             <div class="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
                     Học tập vui vẻ cùng
-                    <span class="text-secondary-300">KidsLearn</span>!
+                    <span class="text-secondary-300">Tài liệu tiểu học</span>!
                 </h1>
                 <p class="text-xl text-white mb-8">
                     Khám phá thế giới kiến thức qua các bài học thú vị và trò chơi hấp

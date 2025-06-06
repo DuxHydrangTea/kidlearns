@@ -8,7 +8,7 @@
                 <div class="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
                     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
                         Học tập vui vẻ cùng
-                        <span class="text-secondary-300">KidsLearn</span>!
+                        <span class="text-secondary-300">Tài Liệu Tiểu Học</span>!
                     </h1>
                     <p class="text-xl text-white mb-8">
                         Khám phá thế giới kiến thức qua các bài học thú vị và trò chơi hấp
@@ -368,7 +368,7 @@
     <section class="py-12 bg-blue-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">
-                Tại sao chọn KidsLearn?
+                Tại sao chọn Tailieutieuhoc.edu.vn?
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -433,7 +433,7 @@
                         </div>
                     </div>
                     <p class="text-gray-700 mb-6">
-                        "Con tôi rất thích học trên KidsLearn. Các bài học vui nhộn và hấp
+                        "Con tôi rất thích học trên Tài Liệu Tiểu Học. Các bài học vui nhộn và hấp
                         dẫn giúp con học tập hiệu quả mà không cảm thấy nhàm chán."
                     </p>
                     <div class="flex items-center">
@@ -454,7 +454,7 @@
                         </div>
                     </div>
                     <p class="text-gray-700 mb-6">
-                        "Tôi rất ấn tượng với cách KidsLearn kết hợp giữa học tập và giải
+                        "Tôi rất ấn tượng với cách Tài Liệu Tiểu Học kết hợp giữa học tập và giải
                         trí. Con tôi đã cải thiện đáng kể kỹ năng toán học và đọc hiểu."
                     </p>
                     <div class="flex items-center">
@@ -475,7 +475,7 @@
                         </div>
                     </div>
                     <p class="text-gray-700 mb-6">
-                        "Là giáo viên, tôi thấy KidsLearn là công cụ tuyệt vời để hỗ trợ
+                        "Là giáo viên, tôi thấy Tài Liệu Tiểu Học là công cụ tuyệt vời để hỗ trợ
                         việc dạy học. Học sinh của tôi rất hào hứng khi được học trên nền
                         tảng này."
                     </p>
