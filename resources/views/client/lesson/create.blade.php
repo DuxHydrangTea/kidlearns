@@ -572,8 +572,7 @@
                 <div class="space-y-6">
                     @for ($set = 1; $set <= 3; $set++)
                         <div class="border-2 border-gray-200 rounded-xl p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-4">Bài kiểm tra {{ $set }}: Phép cộng và
-                                trừ cơ bản</h3>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Bài kiểm tra {{ $set }}/h3>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                                 <div required-value>
