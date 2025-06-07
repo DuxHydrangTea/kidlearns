@@ -278,12 +278,18 @@
                                     </div>
                                     <form class="mt-5" method="POST" action="{{route('document_slide.upload_files')}}" enctype="multipart/form-data">
                                         @csrf
-                                        <label class="block">
+                                        <div class="number-file-container max-h-[200px] overflow-y-auto">
+
+                                        </div>
+                                        {{-- <label class="block">
                                             <span class="text-sm font-medium text-gray-700">Thêm ảnh preview mới</span>
                                             <input type="file" name="images[]" accept="image/*" multiple
                                                 class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                                        </label>
-
+                                        </label> --}}
+                                        <div class="flex gap-2 files-wrapper">
+                                            <input type="number" placeholder="Số slide" class="number-files border-2 flex-1 border-gray-300 rounded py-2 px-2">
+                                            <button type="button" class="number-slide-confirm bg-violet-500 text-white rounded px-4 py-2" >Confirm</button>
+                                        </div>
                                         <input type="hidden" name="document_id" value="{{$document->id}}">
                                         <button
                                             type="submit"
@@ -659,7 +665,7 @@
                    
                     `;
                         // Thêm vào đầu danh sách preview
-                        previewList.prepend(div);
+                        previewList.appendChild(div);
 
                         // Xoá preview tạm nếu bấm nút Xoá
                         div.querySelector('.remove-preview-temp').onclick = () => div.remove();
@@ -677,4 +683,28 @@
                 })
             })
     </script>
+
+ <script>
+    const numberSlideBtns = document.querySelectorAll('.number-slide-confirm');
+    const elementFileSlide = (index) => `
+                    <label class="block mb-2">
+                        <span class="text-sm font-medium text-gray-700">${index}. Thêm ảnh preview mới</span>
+                        <input type="file" name="images[]" accept="image/*"
+                            class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                    </label>
+    `
+    numberSlideBtns.forEach(btn => {
+        btn.addEventListener('click', e =>{
+            const cntFiles = btn.closest('form').querySelector('.number-file-container');
+            const numberInput = btn.closest('.files-wrapper').querySelector('.number-files');
+            const number = numberInput.value;
+            var newElements = ``;
+            for(var i = 0; i < number; i++){
+                newElements += elementFileSlide(i+1);
+            }
+             cntFiles.insertAdjacentHTML('afterbegin', newElements);
+        })
+    })
+ </script>
+
 @endpush
